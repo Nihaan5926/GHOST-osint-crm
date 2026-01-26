@@ -142,7 +142,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Issues and improvements identified through:
 - Community bug reports (Issue #2)
-- Comprehensive security audit
+- Implemented two PRs - thx @erLCoder
+- Done a small security audit
 - Performance profiling
 - Docker best practices review
 
