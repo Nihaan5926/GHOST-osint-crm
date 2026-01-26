@@ -58,11 +58,7 @@ async function createAdminUser() {
       process.exit(1);
     }
 
-    const email = await question('Email: ');
-    if (!email) {
-      console.error('Error: Email is required');
-      process.exit(1);
-    }
+    const email = await question('Email (optional): ');
 
     const password = await question('Password: ');
     if (!password) {
@@ -82,7 +78,7 @@ async function createAdminUser() {
       `INSERT INTO users (username, email, password_hash, first_name, last_name, role, is_active)
        VALUES ($1, $2, $3, $4, $5, 'admin', true)
        RETURNING id, username, email, first_name, last_name, role`,
-      [username, email, password_hash, firstName || null, lastName || null]
+      [username, email || null, password_hash, firstName || null, lastName || null]
     );
 
     console.log('\n✓ Admin user created successfully!\n');

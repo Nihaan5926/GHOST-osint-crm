@@ -81,18 +81,38 @@ The easiest way to run GHOST is with Docker:
 git clone <repo-url>
 cd GHOST-osint-crm
 
-# Copy environment file
+# Copy environment file and configure it
 cp .env.example .env
-# Edit .env with your configuration
+
+# IMPORTANT: Edit .env with your configuration
+# For production, you MUST set:
+# - DB_PASSWORD (strong password)
+# - SESSION_SECRET (generate with: openssl rand -base64 32)
+# - FRONTEND_URL (your frontend URL)
+nano .env
 
 # Start all services
-docker-compose up --build
+docker-compose up --build -d
+```
+
+**Create your first admin user:**
+```bash
+# After containers are running
+docker exec -it osint-crm-backend node scripts/createAdminUser.js
+
+# Follow the prompts:
+# - Username: (required)
+# - Email: (optional - press Enter to skip)
+# - Password: (required)
+# - First Name: (optional)
+# - Last Name: (optional)
 ```
 
 **Access the application:**
 - Frontend: http://localhost:8080
 - Backend API: http://localhost:3001
-- Database: PostgreSQL on port 5432
+- Health Check: http://localhost:3001/api/health
+- Database: PostgreSQL on port 5432 (development only)
 
 ## 📋 Prerequisites
 
@@ -195,13 +215,26 @@ GHOST-osint-crm/
 
 ## 🔐 Security Considerations
 
-**Important:**
-- Never commit `.env` files
-- Keep `backend/public/uploads/` out of version control
-- Secure your PostgreSQL database
-- Use strong JWT secrets
-- Review uploaded files for security
-- Follow local laws for data collection
+**Critical - Production Deployment:**
+- ⚠️ **Never use default passwords in production** - Application will refuse to start
+- ⚠️ **Generate strong SESSION_SECRET** - Minimum 32 characters required
+  ```bash
+  # Generate a secure secret
+  openssl rand -base64 32
+  ```
+- ⚠️ **Set FRONTEND_URL** - Required for CORS security
+- ⚠️ **Use strong DB_PASSWORD** - Weak passwords rejected in production
+- 🔒 **Remove database port exposure** - Comment out port mapping in `docker-compose.yml` for production
+- 🔒 **Never commit `.env` files** - Contains sensitive credentials
+- 🔒 **Keep `backend/public/uploads/` out of version control** - User-generated content
+- 🔒 **Review uploaded files for security** - Implement malware scanning if needed
+- 🔒 **Follow local laws for data collection** - Comply with privacy regulations
+- 🔒 **Use HTTPS in production** - Configure reverse proxy with SSL/TLS
+- 🔒 **Regular security updates** - Keep dependencies updated
+
+**Development vs Production:**
+- Development mode shows warnings for weak credentials
+- Production mode enforces security requirements and exits if not met
 
 ## 🤝 Contributing
 
@@ -243,15 +276,71 @@ This tool is intended for **legitimate OSINT investigation purposes only**. User
 
 The authors are not responsible for misuse of this software.
 
-## 🆘 Support
+## 🆘 Support & Troubleshooting
 
-**Having issues?**
+**Common Issues:**
 
-1. Check Docker logs: `docker-compose logs`
-2. Review backend logs for API errors
-3. Check browser console for frontend errors
-4. Verify database connection
-5. Open an issue on GitHub with details
+### Issue: "Table 'users' does not exist"
+This has been fixed in v2.1.0. The users table is now created automatically.
+```bash
+# Rebuild containers to apply fix
+docker-compose down -v
+docker-compose up --build
+```
+
+### Issue: Application won't start in production
+Check that you've set required environment variables:
+```bash
+# Verify .env file contains:
+DB_PASSWORD=<strong-password-not-changeme>
+SESSION_SECRET=<32+-character-secret>
+FRONTEND_URL=http://localhost:8080
+```
+
+### Issue: Permission denied errors in Docker
+The backend now runs as non-root user (nodejs:1001). Ensure upload directories have correct permissions:
+```bash
+chmod -R 777 backend/public/uploads/
+```
+
+### General Troubleshooting Steps:
+
+1. **Check service health:**
+   ```bash
+   docker-compose ps
+   # All services should show (healthy)
+   ```
+
+2. **View logs:**
+   ```bash
+   docker-compose logs backend
+   docker-compose logs frontend
+   docker-compose logs db
+   ```
+
+3. **Check health endpoint:**
+   ```bash
+   curl http://localhost:3001/api/health
+   ```
+
+4. **Verify database connection:**
+   ```bash
+   docker exec osint-crm-db psql -U postgres -d osint_crm_db -c "SELECT COUNT(*) FROM users;"
+   ```
+
+5. **Clean restart:**
+   ```bash
+   docker-compose down -v  # WARNING: Deletes all data
+   docker-compose up --build
+   ```
+
+6. **Check browser console** for frontend errors
+
+7. **Open an issue on GitHub** with:
+   - Error messages from logs
+   - Steps to reproduce
+   - Docker version
+   - Operating system
 
 ## 💬 Feedback
 
@@ -277,7 +366,22 @@ Feedback, inputs, and suggestions are highly welcome! Please open an issue or re
 
 ---
 
+## 📋 Recent Changes
+
+### Version 2.1.0 (January 2026)
+- 🔒 **Critical security improvements** - Production environment validation
+- 🐛 **Fixed users table creation** - No more manual migrations needed
+- ⚡ **Performance optimizations** - Database indexes added
+- 🎯 **Optional email field** - Admin users don't require email
+- 🛡️ **Docker security** - Non-root user implementation
+- 🏥 **Health checks** - All services monitored for reliability
+- 📝 **Graceful shutdown** - Proper cleanup on container stop
+
+See [CHANGELOG.md](CHANGELOG.md) for complete details.
+
+---
+
 Built with ❤️ for the OSINT community.
 
-**Version:** 2.0
-**Last Updated:** October 2025
+**Version:** 2.1.0
+**Last Updated:** January 2026

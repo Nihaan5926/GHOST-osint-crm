@@ -267,11 +267,17 @@ cursor/
 # User Data and Uploads (IMPORTANT: Never commit sensitive data)
 backend/public/uploads/**/*
 !backend/public/uploads/.gitkeep
+!backend/public/uploads/logos/.gitkeep
 Wigle\ Sample\ Files/
 *.kml
 *.csv
 *.json.backup
 *-export-*.json
+
+# Docker generated files
+*.pid
+*.sock
+.dockerignore.local
 
 # Package Lock Files (optional - uncomment to ignore)
 package-lock.json

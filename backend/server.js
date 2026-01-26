@@ -67,6 +67,42 @@ function checkFileType(file, filetypes, cb) {
   }
 }
 
+// Validate critical environment variables in production
+if (process.env.NODE_ENV === 'production') {
+  const requiredEnvVars = ['DB_PASSWORD', 'SESSION_SECRET'];
+  const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+  if (missingVars.length > 0) {
+    console.error('CRITICAL ERROR: Missing required environment variables in production:');
+    missingVars.forEach(varName => console.error(`  - ${varName}`));
+    console.error('Application cannot start without these variables.');
+    process.exit(1);
+  }
+
+  // Validate password strength
+  const weakPasswords = ['changeme', 'password', 'admin', 'postgres', '12345678'];
+  if (weakPasswords.includes(process.env.DB_PASSWORD.toLowerCase())) {
+    console.error('CRITICAL ERROR: DB_PASSWORD is too weak for production use.');
+    console.error('Please use a strong, randomly generated password.');
+    process.exit(1);
+  }
+
+  if (process.env.SESSION_SECRET.length < 32) {
+    console.error('CRITICAL ERROR: SESSION_SECRET must be at least 32 characters long.');
+    process.exit(1);
+  }
+}
+
+// Warn about default values in development
+if (process.env.NODE_ENV !== 'production') {
+  if (!process.env.DB_PASSWORD || process.env.DB_PASSWORD === 'changeme') {
+    console.warn('WARNING: Using default database password. This is acceptable for development but NOT for production.');
+  }
+  if (!process.env.SESSION_SECRET) {
+    console.warn('WARNING: Using default session secret. This is acceptable for development but NOT for production.');
+  }
+}
+
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'db',
@@ -163,6 +199,18 @@ const initializeDatabase = async () => {
     `);
     console.log('Checked/created "people" table.');
     await applyUpdatedAtTrigger(client, 'people');
+
+    // Create indexes for people table
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_people_first_name ON people(first_name);
+      CREATE INDEX IF NOT EXISTS idx_people_last_name ON people(last_name);
+      CREATE INDEX IF NOT EXISTS idx_people_full_name ON people(first_name, last_name);
+      CREATE INDEX IF NOT EXISTS idx_people_category ON people(category);
+      CREATE INDEX IF NOT EXISTS idx_people_status ON people(status);
+      CREATE INDEX IF NOT EXISTS idx_people_case_name ON people(case_name);
+      CREATE INDEX IF NOT EXISTS idx_people_dob ON people(date_of_birth);
+    `);
+    console.log('Created indexes for "people" table.');
 
     await client.query(`
       CREATE TABLE IF NOT EXISTS tools (
@@ -304,6 +352,66 @@ const initializeDatabase = async () => {
     `);
     console.log('Checked/created "audit_logs" table.');
 
+    // Create indexes for audit_logs table
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_audit_logs_entity ON audit_logs(entity_type, entity_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_logs_user_id ON audit_logs(user_id);
+      CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at DESC);
+      CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
+    `);
+    console.log('Created indexes for "audit_logs" table.');
+
+    // Create users table for authentication
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        email VARCHAR(255) UNIQUE,
+        password_hash VARCHAR(255) NOT NULL,
+        first_name VARCHAR(100),
+        last_name VARCHAR(100),
+        role VARCHAR(20) NOT NULL DEFAULT 'user' CHECK (role IN ('admin', 'user')),
+        is_active BOOLEAN DEFAULT TRUE,
+        last_login TIMESTAMPTZ,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+    console.log('Checked/created "users" table.');
+    await applyUpdatedAtTrigger(client, 'users');
+
+    // Make email nullable for existing databases
+    await client.query(`
+      ALTER TABLE users ALTER COLUMN email DROP NOT NULL;
+    `);
+    console.log('Ensured email column is nullable in "users" table.');
+
+    // Create indexes for users table
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
+      CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
+      CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+    `);
+    console.log('Created indexes for "users" table.');
+
+    // Add foreign key constraint to audit_logs after users table exists
+    await client.query(`
+      DO $$
+      BEGIN
+        IF NOT EXISTS (
+          SELECT 1 FROM information_schema.table_constraints
+          WHERE constraint_name = 'fk_audit_logs_user'
+        ) THEN
+          ALTER TABLE audit_logs
+            ADD CONSTRAINT fk_audit_logs_user
+            FOREIGN KEY (user_id)
+            REFERENCES users(id)
+            ON DELETE SET NULL;
+        END IF;
+      END $$;
+    `);
+    console.log('Added foreign key constraint from audit_logs to users.');
+
     await client.query(`
       CREATE TABLE IF NOT EXISTS cases (
         id SERIAL PRIMARY KEY,
@@ -427,8 +535,9 @@ app.use(auditMiddleware);
 
 // Audit logging function (keeping for backwards compatibility)
 const logAudit = async (entityType, entityId, action, changes = {}) => {
+  let client;
   try {
-    const client = await pool.connect();
+    client = await pool.connect();
 
     for (const [fieldName, { oldValue, newValue }] of Object.entries(changes)) {
       await client.query(`
@@ -436,10 +545,12 @@ const logAudit = async (entityType, entityId, action, changes = {}) => {
         VALUES ($1, $2, $3, $4, $5, $6)
       `, [entityType, entityId, fieldName, oldValue?.toString() || null, newValue?.toString() || null, action]);
     }
-
-    client.release();
   } catch (err) {
     console.error('Error logging audit:', err);
+  } finally {
+    if (client) {
+      client.release();
+    }
   }
 };
 
@@ -456,6 +567,27 @@ app.use('/api', entityNetworkRoutes);
 
 app.get('/api', (req, res) => {
   res.json({ message: "Hello from the OSINT CRM Backend!" });
+});
+
+// Health check endpoint for Docker healthcheck and monitoring
+app.get('/api/health', async (req, res) => {
+  try {
+    // Check database connectivity
+    await pool.query('SELECT 1');
+    res.status(200).json({
+      status: 'healthy',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      database: 'connected'
+    });
+  } catch (error) {
+    res.status(503).json({
+      status: 'unhealthy',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message
+    });
+  }
 });
 
 app.post('/api/upload/logo', logoUpload.single('appLogo'), (req, res) => {
@@ -2560,6 +2692,48 @@ app.delete('/api/wireless-networks/:id/associate', async (req, res) => {
 
 // ===== END WIRELESS NETWORKS API =====
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`Backend server is running on http://localhost:${PORT}`);
+});
+
+// Graceful shutdown handler
+const gracefulShutdown = async (signal) => {
+  console.log(`\n${signal} received. Starting graceful shutdown...`);
+
+  // Stop accepting new connections
+  server.close(async () => {
+    console.log('HTTP server closed.');
+
+    try {
+      // Close database pool
+      await pool.end();
+      console.log('Database pool closed.');
+      process.exit(0);
+    } catch (err) {
+      console.error('Error during graceful shutdown:', err);
+      process.exit(1);
+    }
+  });
+
+  // Force shutdown after 10 seconds
+  setTimeout(() => {
+    console.error('Forced shutdown after timeout');
+    process.exit(1);
+  }, 10000);
+};
+
+// Handle shutdown signals
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  gracefulShutdown('UNCAUGHT_EXCEPTION');
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  gracefulShutdown('UNHANDLED_REJECTION');
 });

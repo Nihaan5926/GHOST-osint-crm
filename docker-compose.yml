@@ -12,9 +12,16 @@ services:
       - "8080:80"
     restart: unless-stopped
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     networks:
       - osint-crm-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   # Backend Service (Node.js/Express API)
   backend:
@@ -36,9 +43,16 @@ services:
       - ./backend/public:/usr/src/app/public
     restart: unless-stopped
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - osint-crm-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   # Database Service (PostgreSQL)
   db:
@@ -48,6 +62,8 @@ services:
       POSTGRES_USER: ${DB_USER:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
       POSTGRES_DB: ${DB_NAME:-osint_crm_db}
+    # SECURITY: Port mapping exposes database to host network
+    # Comment out in production - only needed for local development/debugging
     ports:
       - "5432:5432"
     volumes:
@@ -55,6 +71,11 @@ services:
     restart: unless-stopped
     networks:
       - osint-crm-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-osint_crm_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 # Define a network for the services to communicate
 networks:
