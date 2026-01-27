@@ -81,7 +81,7 @@ const SystemHealth = () => {
 
   if (loading) {
     return (
-      <div className="p-3 glass rounded-glass">
+      <div className="p-3 glass rounded-lg">
         <div className="text-xs text-gray-500 dark:text-gray-400 text-center">
           <div className="flex items-center justify-center space-x-1">
             <Activity className="w-3 h-3 animate-pulse" />
@@ -94,7 +94,7 @@ const SystemHealth = () => {
 
   if (error) {
     return (
-      <div className="p-3 glass rounded-glass">
+      <div className="p-3 glass rounded-lg">
         <div className="text-xs text-red-500 text-center">
           <div className="flex items-center justify-center space-x-1">
             <WifiOff className="w-3 h-3" />
@@ -109,7 +109,7 @@ const SystemHealth = () => {
 
   return (
     <div className="fixed bottom-4 right-4 z-50">
-      <div className={`glass rounded-glass shadow-lg transition-all duration-300 ${expanded ? 'w-72' : 'w-auto'}`}>
+      <div className={`glass rounded-lg shadow-lg transition-all duration-300 ${expanded ? 'w-72' : 'w-auto'}`}>
         <div
           className="p-3 text-xs text-gray-700 dark:text-gray-300 cursor-pointer"
           onClick={() => setExpanded(!expanded)}
@@ -134,7 +134,7 @@ const SystemHealth = () => {
 
           {/* Expanded Details */}
           {expanded && (
-            <div className="mt-3 space-y-3 border-t border-white/20 dark:border-gray-700 pt-3">
+            <div className="mt-3 space-y-3 border-t border-gray-200 dark:border-gray-700 dark:border-gray-700 pt-3">
               {/* System Info */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -231,14 +231,14 @@ const SystemHealth = () => {
               {/* Activity */}
               <div className="flex items-center justify-between p-2 bg-accent-primary/10 rounded">
                 <div className="flex items-center space-x-2">
-                  <Activity className="w-4 h-4 text-accent-primary" />
+                  <Activity className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span className="font-medium">Activity (24h)</span>
                 </div>
-                <span className="font-bold text-accent-primary">{health.counts?.recentActivity || 0}</span>
+                <span className="font-bold text-blue-600 dark:text-blue-400">{health.counts?.recentActivity || 0}</span>
               </div>
 
               {/* Last Updated */}
-              <div className="flex items-center justify-center space-x-1 text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-white/20 dark:border-gray-700">
+              <div className="flex items-center justify-center space-x-1 text-xs text-gray-500 dark:text-gray-400 pt-2 border-t border-gray-200 dark:border-gray-700 dark:border-gray-700">
                 <Clock className="w-3 h-3" />
                 <span>Updated {new Date(health.timestamp).toLocaleTimeString()}</span>
               </div>

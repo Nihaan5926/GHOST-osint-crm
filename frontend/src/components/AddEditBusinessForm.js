@@ -380,28 +380,28 @@ const AddEditBusinessForm = ({ business, onSave, onCancel }) => {
             </div>
             
             {showEmployeeForm && (
-              <div className="mb-3 p-3 glass rounded-glass border border-white/30">
+              <div className="mb-3 p-3 glass rounded-lg border border-gray-300 dark:border-gray-600">
                 <div className="grid grid-cols-3 gap-2 mb-2">
                   <input
                     type="text"
                     value={newEmployee.name}
                     onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
                     placeholder="Name *"
-                    className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary text-sm"
+                    className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary text-sm"
                   />
                   <input
                     type="text"
                     value={newEmployee.role}
                     onChange={(e) => setNewEmployee({ ...newEmployee, role: e.target.value })}
                     placeholder="Role"
-                    className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary text-sm"
+                    className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary text-sm"
                   />
                   <input
                     type="text"
                     value={newEmployee.department}
                     onChange={(e) => setNewEmployee({ ...newEmployee, department: e.target.value })}
                     placeholder="Department"
-                    className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary text-sm"
+                    className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary text-sm"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2 mb-2">
@@ -410,14 +410,14 @@ const AddEditBusinessForm = ({ business, onSave, onCancel }) => {
                     value={newEmployee.email}
                     onChange={(e) => setNewEmployee({ ...newEmployee, email: e.target.value })}
                     placeholder="Email"
-                    className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary text-sm"
+                    className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary text-sm"
                   />
                   <input
                     type="text"
                     value={newEmployee.notes}
                     onChange={(e) => setNewEmployee({ ...newEmployee, notes: e.target.value })}
                     placeholder="Notes"
-                    className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary text-sm"
+                    className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary text-sm"
                   />
                 </div>
                 <div className="flex justify-end space-x-2 mt-2">
@@ -427,14 +427,14 @@ const AddEditBusinessForm = ({ business, onSave, onCancel }) => {
                       setShowEmployeeForm(false);
                       setNewEmployee({ name: '', role: '', department: '', email: '', notes: '' });
                     }}
-                    className="px-3 py-1 text-gray-700 glass-button rounded-glass hover:bg-gray-200 text-sm transition-all"
+                    className="px-3 py-1 text-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 hover:bg-gray-200 text-sm transition-all"
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
                     onClick={addEmployee}
-                    className="px-3 py-1 bg-gradient-primary text-white rounded-glass hover:shadow-glow-sm text-sm transition-all"
+                    className="px-3 py-1 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-md text-sm transition-all"
                   >
                     Add
                   </button>
@@ -444,14 +444,14 @@ const AddEditBusinessForm = ({ business, onSave, onCancel }) => {
             
             <div className="space-y-2">
               {formData.employees.map((employee) => (
-                <div key={employee.id} className="flex items-center justify-between p-3 glass rounded-glass border border-white/30">
+                <div key={employee.id} className="flex items-center justify-between p-3 glass rounded-lg border border-gray-300 dark:border-gray-600">
                   <div className="flex items-center space-x-3">
                     <User className="w-4 h-4 text-gray-400 dark:text-gray-500" />
                     <div className="flex-1">
                       <div className="flex items-center space-x-2">
                         <span className="font-medium">{employee.name}</span>
                         {employee.role && <span className="text-sm text-gray-600 dark:text-gray-400">- {employee.role}</span>}
-                        {employee.department && <span className="text-sm text-gray-500 dark:text-gray-500">({employee.department})</span>}
+                        {employee.department && <span className="text-sm text-gray-500 dark:text-gray-500 dark:text-gray-400">({employee.department})</span>}
                       </div>
                       <div className="flex items-center space-x-4 mt-1">
                         {employee.email && (

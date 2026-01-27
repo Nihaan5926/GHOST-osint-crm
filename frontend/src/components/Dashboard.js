@@ -109,7 +109,7 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
         <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">Dashboard</h1>
         <button
           onClick={() => setShowReportGenerator(true)}
-          className="px-6 py-3 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all duration-300 flex items-center group"
+          className="px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all duration-300 flex items-center group"
         >
           <FileText className="w-5 h-5 mr-2 group-hover:animate-pulse" />
           Generate Report
@@ -118,7 +118,7 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Active People */}
-        <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 hover:shadow-glass-xl transition-all duration-300">
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 hover:shadow-glass-xl transition-all duration-300">
           <h3 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent mb-4">Recently Updated People</h3>
           <div className="space-y-3">
             {activePeople.length === 0 ? (
@@ -126,20 +126,20 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
                 <p className="text-sm">No people added yet.</p>
                 <button
                   onClick={() => setActiveSection('people')}
-                  className="mt-3 px-4 py-2 text-accent-primary hover:bg-gradient-primary hover:text-white rounded-glass transition-all duration-300 text-sm font-medium"
+                  className="mt-3 px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-700 dark:hover:bg-blue-600 hover:text-white rounded-lg transition-all duration-300 text-sm font-medium"
                 >
                   Add Your First Person →
                 </button>
               </div>
             ) : (
               activePeople.map(person => (
-                <div key={person.id} className="flex items-center justify-between p-4 glass rounded-glass-lg hover:glass-heavy transition-all duration-300 group">
+                <div key={person.id} className="flex items-center justify-between p-4 glass rounded-lg-lg hover:bg-gray-100 dark:bg-gray-700 transition-all duration-300 group">
                   <div className="flex-1 min-w-0 mr-4">
                     <p className="font-semibold text-gray-900 dark:text-gray-100">{getFullName(person)}</p>
                     <p className="text-sm text-gray-600 dark:text-gray-400">{person.case_name || 'No case assigned'}</p>
                     <div className="flex items-center mt-2 space-x-3 text-xs text-gray-500 dark:text-gray-400">
                       <div className="flex items-center">
-                        <Network className="w-3 h-3 mr-1 text-accent-primary" />
+                        <Network className="w-3 h-3 mr-1 text-blue-600 dark:text-blue-400" />
                         {getRelationshipCount(person.id)} connections
                       </div>
                       {person.updated_at && (
@@ -151,7 +151,7 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
                   </div>
                   <button
                     onClick={() => setSelectedPersonForDetail(person)}
-                    className="px-3 py-2 text-accent-primary dark:text-blue-400 hover:bg-gradient-primary hover:text-white dark:hover:bg-blue-400 dark:hover:text-white rounded-glass transition-all duration-300 text-sm font-medium group-hover:shadow-glow-sm flex-shrink-0"
+                    className="px-3 py-2 text-blue-600 dark:text-blue-400 dark:text-blue-400 hover:bg-blue-700 dark:hover:bg-blue-600 hover:text-white dark:hover:bg-blue-400 dark:hover:text-white rounded-lg transition-all duration-300 text-sm font-medium group-hover:shadow-md flex-shrink-0"
                   >
                     View Details
                   </button>
@@ -162,7 +162,7 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
         </div>
 
         {/* To-Do List */}
-        <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 hover:shadow-glass-xl transition-all duration-300">
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 hover:shadow-glass-xl transition-all duration-300">
           <h3 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent mb-4">To-Do List</h3>
           <div className="mb-4 flex space-x-3">
             <input
@@ -171,11 +171,11 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
               onChange={(e) => setNewTodo(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleAddTodo()}
               placeholder="Add a new task..."
-              className="flex-1 px-4 py-3 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary focus:shadow-glow-sm transition-all duration-300 dark:text-gray-100 dark:bg-slate-800 dark:placeholder-gray-600"
+              className="flex-1 px-4 py-3 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary focus:shadow-md transition-all duration-300 dark:text-gray-100 dark:bg-slate-800 dark:placeholder-gray-600"
             />
             <button 
               onClick={handleAddTodo} 
-              className="px-6 py-3 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all duration-300 font-medium"
+              className="px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all duration-300 font-medium"
             >
               Add
             </button>
@@ -187,7 +187,7 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
               </div>
             ) : (
               todos.map(todo => (
-                <div key={todo.id} className="flex items-center space-x-3 p-3 glass rounded-glass hover:glass-heavy transition-all duration-300 group">
+                <div key={todo.id} className="flex items-center space-x-3 p-3 glass rounded-lg hover:bg-gray-100 dark:bg-gray-700 transition-all duration-300 group">
                   <div className={`w-5 h-5 rounded flex items-center justify-center flex-shrink-0 ${
                     todo.status === 'done' || todo.status === 'cancelled' ? getStatusStyle(todo.status) : 'border-2 border-gray-300 dark:border-gray-600'
                   }`}>
@@ -268,17 +268,17 @@ const Dashboard = ({ people, tools, todos, setTodos, setSelectedPersonForDetail,
       </div>
 
       {/* Global Relationship Overview */}
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 hover:shadow-glass-xl transition-all duration-300">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 hover:shadow-glass-xl transition-all duration-300">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent">Global Relationship Overview</h3>
           <button
             onClick={() => setActiveSection('relationships')}
-            className="px-4 py-2 text-accent-primary hover:bg-gradient-primary hover:text-white rounded-glass transition-all duration-300 font-medium hover:shadow-glow-sm"
+            className="px-4 py-2 text-blue-600 dark:text-blue-400 hover:bg-blue-700 dark:hover:bg-blue-600 hover:text-white rounded-lg transition-all duration-300 font-medium hover:shadow-md"
           >
             View Full Network →
           </button>
         </div>
-        <div className="h-96 bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-200 dark:border-white/30 shadow-lg" style={{ minHeight: '384px' }}>
+        <div className="h-96 bg-white dark:bg-slate-800 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-300 dark:border-gray-600 shadow-lg" style={{ minHeight: '384px' }}>
           <RelationshipManager
             showInModal={true}
             onClose={() => {}}

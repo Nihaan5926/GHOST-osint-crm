@@ -102,12 +102,12 @@ const ImportKML = ({ onClose, onImportComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-glass-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-slate-800 rounded-lg-lg shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-glass bg-gradient-primary flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center">
               <Upload className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -122,7 +122,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
           <button
             onClick={handleClose}
             disabled={importing}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-glass-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
@@ -140,7 +140,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
                 onDrop={handleDrop}
                 onClick={() => !file && fileInputRef.current?.click()}
                 className={`
-                  border-2 border-dashed rounded-glass-lg p-8 text-center cursor-pointer
+                  border-2 border-dashed rounded-lg-lg p-8 text-center cursor-pointer
                   transition-all duration-200
                   ${dragActive
                     ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
@@ -200,7 +200,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
 
               {/* File Preview Info */}
               {file && (
-                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-glass-lg border border-blue-200 dark:border-blue-800">
+                <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg-lg border border-blue-200 dark:border-blue-800">
                   <div className="flex items-start space-x-3">
                     <FileText className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                     <div className="flex-1 min-w-0">
@@ -220,7 +220,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
 
           {/* Error Message */}
           {error && (
-            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-glass-lg border border-red-200 dark:border-red-800">
+            <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg-lg border border-red-200 dark:border-red-800">
               <div className="flex items-start space-x-3">
                 <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 mt-0.5 flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -237,7 +237,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
 
           {/* Import Progress */}
           {importing && (
-            <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-glass-lg border border-blue-200 dark:border-blue-800">
+            <div className="p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg-lg border border-blue-200 dark:border-blue-800">
               <div className="flex items-center space-x-4">
                 <Loader className="w-6 h-6 text-blue-600 dark:text-blue-400 animate-spin flex-shrink-0" />
                 <div className="flex-1 min-w-0">
@@ -255,7 +255,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
           {/* Import Results */}
           {importResult && (
             <div className="space-y-4">
-              <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-glass-lg border border-green-200 dark:border-green-800">
+              <div className="p-6 bg-green-50 dark:bg-green-900/20 rounded-lg-lg border border-green-200 dark:border-green-800">
                 <div className="flex items-start space-x-4">
                   <div className="w-12 h-12 rounded-full bg-green-100 dark:bg-green-900/40 flex items-center justify-center flex-shrink-0">
                     <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
@@ -273,13 +273,13 @@ const ImportKML = ({ onClose, onImportComplete }) => {
 
               {/* Import Statistics */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 bg-white dark:bg-slate-700/50 rounded-glass-lg border border-gray-200 dark:border-gray-700">
+                <div className="p-4 bg-white dark:bg-slate-700/50 rounded-lg-lg border border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Networks Imported</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                     {importResult.imported || 0}
                   </p>
                 </div>
-                <div className="p-4 bg-white dark:bg-slate-700/50 rounded-glass-lg border border-gray-200 dark:border-gray-700">
+                <div className="p-4 bg-white dark:bg-slate-700/50 rounded-lg-lg border border-gray-200 dark:border-gray-700">
                   <p className="text-sm text-gray-600 dark:text-gray-400">Errors</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-1">
                     {importResult.errors || 0}
@@ -289,7 +289,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
 
               {/* Error Details */}
               {importResult.errorDetails && importResult.errorDetails.length > 0 && (
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-glass-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg-lg border border-yellow-200 dark:border-yellow-800">
                   <p className="text-sm font-medium text-yellow-900 dark:text-yellow-200 mb-2">
                     Error Details:
                   </p>
@@ -320,7 +320,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
               onClick={handleClose}
               disabled={importing}
               className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300
-                       hover:bg-gray-100 dark:hover:bg-slate-700 rounded-glass-lg
+                       hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg-lg
                        transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Cancel
@@ -329,7 +329,7 @@ const ImportKML = ({ onClose, onImportComplete }) => {
               onClick={handleImport}
               disabled={!file || importing}
               className="px-6 py-2 text-sm font-medium text-white bg-gradient-primary
-                       rounded-glass-lg hover:shadow-glow-lg transition-all
+                       rounded-lg-lg hover:shadow-glow-lg transition-all
                        disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
                        flex items-center space-x-2"
             >

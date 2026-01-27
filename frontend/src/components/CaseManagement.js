@@ -314,11 +314,11 @@ const CaseManagement = ({
                   >
                     <FileText className="w-4 h-4" />
                   </button>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                     <Users className="w-4 h-4" />
                     <span>{caseItem.peopleCount} people</span>
                   </div>
-                  <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
                     <Clock className="w-4 h-4" />
                     <span>{getTimeAgo(caseItem.lastUpdate)}</span>
                   </div>
@@ -329,15 +329,15 @@ const CaseManagement = ({
                 <div className="mt-3 flex items-center space-x-6 text-sm">
                   <div className="flex items-center space-x-1">
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="text-gray-600">Open: {caseItem.openCount}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Open: {caseItem.openCount}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
-                    <span className="text-gray-600">Investigating: {caseItem.investigatingCount}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Investigating: {caseItem.investigatingCount}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-                    <span className="text-gray-600">Closed: {caseItem.closedCount}</span>
+                    <span className="text-gray-600 dark:text-gray-400">Closed: {caseItem.closedCount}</span>
                   </div>
                 </div>
               )}
@@ -417,7 +417,7 @@ const CaseManagement = ({
                   ) : (
                     <div className="flex items-start justify-between">
                       <div>
-                        <p className="text-sm text-gray-600">{caseItem.description || 'No description'}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{caseItem.description || 'No description'}</p>
                         <p className="text-xs text-gray-500 mt-1">
                           Created: {new Date(caseItem.created_at).toLocaleDateString()}
                         </p>
@@ -514,13 +514,13 @@ const CaseManagement = ({
                                 </span>
                               )}
                             </p>
-                            <p className="text-sm text-gray-600">
+                            <p className="text-sm text-gray-600 dark:text-gray-400">
                               {person.category} • {person.status}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-500">
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
                             Updated {getTimeAgo(new Date(person.updated_at || person.created_at))}
                           </span>
                           <button
@@ -572,7 +572,7 @@ const CaseManagement = ({
                     />
                     <div className="flex-1">
                       <p className="font-medium">{getFullName(person)}</p>
-                      <p className="text-sm text-gray-600">{person.category}</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">{person.category}</p>
                     </div>
                   </label>
                 ))}

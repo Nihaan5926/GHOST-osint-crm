@@ -1028,7 +1028,7 @@ const ReportGenerator = ({ caseId = null, personId = null, customPeopleIds = nul
             <FileText className="w-6 h-6 text-blue-600" />
             <h2 className="text-2xl font-bold text-gray-900">Generate Investigation Report</h2>
           </div>
-          <button onClick={onClose} className="text-gray-600 hover:text-gray-700">
+          <button onClick={onClose} className="text-gray-600 hover:text-gray-700 dark:text-gray-300">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -1114,7 +1114,7 @@ const ReportGenerator = ({ caseId = null, personId = null, customPeopleIds = nul
                 <div className="bg-gray-50 rounded-lg p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Report Scope:</span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
                       {data.selectedCase ? `Case: ${data.selectedCase.case_name}` : 
                        data.selectedPerson ? `Person: ${getFullName(data.selectedPerson)}` :
                        'All Data'}
@@ -1123,19 +1123,19 @@ const ReportGenerator = ({ caseId = null, personId = null, customPeopleIds = nul
                   
                   <div className="flex items-center justify-between">
                     <span className="font-medium">People Included:</span>
-                    <span className="text-sm text-gray-600">{data.people.length}</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{data.people.length}</span>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Total Connections:</span>
-                    <span className="text-sm text-gray-600">
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
                       {data.people.reduce((sum, p) => sum + (p.connections?.length || 0), 0)}
                     </span>
                   </div>
                   
                   <div className="flex items-center justify-between">
                     <span className="font-medium">Export Formats:</span>
-                    <span className="text-sm text-gray-600">Markdown (.md) | Word (.docx)</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">Markdown (.md) | Word (.docx)</span>
                   </div>
                 </div>
                 

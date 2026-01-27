@@ -10,7 +10,7 @@ const DarkModeToggle = ({ darkMode, setDarkMode }) => {
   return (
     <button
       onClick={toggleDarkMode}
-      className="glass-button rounded-glass p-2 transition-all duration-300 hover:shadow-glow-sm group"
+      className="rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 p-2 transition-all duration-300 hover:shadow-md group"
       title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
     >
       <div className="relative w-5 h-5">

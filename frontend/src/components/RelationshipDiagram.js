@@ -85,7 +85,7 @@ const PersonNode = ({ data, selected }) => {
           </div>
           <div className="min-w-0">
             <div className="text-sm font-medium text-gray-900 truncate">{data.label}</div>
-            <div className="text-xs text-gray-500">{data.category || 'Unknown'}</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">{data.category || 'Unknown'}</div>
             {data.caseName && <div className="text-xs text-blue-600 truncate">{data.caseName}</div>}
           </div>
         </div>
@@ -506,7 +506,7 @@ const RelationshipDiagram = ({
         </div>
         
         {isAddingConnection && (
-          <div className="text-sm text-gray-600">
+          <div className="text-sm text-gray-600 dark:text-gray-400">
             {selectedNodes.length === 0 && 'Click on two people to connect them'}
             {selectedNodes.length === 1 && 'Select one more person'}
             {selectedNodes.length === 2 && 'Click "Connect" to create relationship'}
@@ -551,7 +551,7 @@ const RelationshipDiagram = ({
                   strokeDasharray={style.strokeDasharray || '0'}
                 />
               </svg>
-              <span className="text-xs text-gray-600">{style.label}</span>
+              <span className="text-xs text-gray-600 dark:text-gray-400">{style.label}</span>
             </div>
           ))}
         </div>

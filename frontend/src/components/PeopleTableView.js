@@ -292,19 +292,19 @@ const PeopleTableView = ({
   return (
     <div className="space-y-4">
       {/* Toolbar */}
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setShowQuickAdd(!showQuickAdd)}
-              className="px-4 py-2 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all flex items-center space-x-2"
+              className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all flex items-center space-x-2"
             >
               <Plus className="w-4 h-4" />
               <span>Quick Add</span>
             </button>
             <button
               onClick={() => setShowBulkRelationships(true)}
-              className="px-4 py-2 bg-gradient-secondary text-white rounded-glass hover:shadow-glow-md transition-all flex items-center space-x-2"
+              className="px-4 py-2 bg-gradient-secondary text-white rounded-lg hover:shadow-glow-md transition-all flex items-center space-x-2"
             >
               <LinkIcon className="w-4 h-4" />
               <span>Bulk Relationships</span>
@@ -312,7 +312,7 @@ const PeopleTableView = ({
 
             <button
               onClick={() => fileInputRef.current?.click()}
-              className="px-4 py-2 glass-button text-gray-700 rounded-glass hover:shadow-glow-sm transition-all flex items-center space-x-2"
+              className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:shadow-md transition-all flex items-center space-x-2"
             >
               <Upload className="w-4 h-4" />
               <span>Import CSV</span>
@@ -320,7 +320,7 @@ const PeopleTableView = ({
 
             <button
               onClick={handleExportCSV}
-              className="px-4 py-2 glass-button text-gray-700 rounded-glass hover:shadow-glow-sm transition-all flex items-center space-x-2"
+              className="px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg hover:shadow-md transition-all flex items-center space-x-2"
             >
               <Download className="w-4 h-4" />
               <span>Export CSV</span>
@@ -354,7 +354,7 @@ const PeopleTableView = ({
 
       {/* Quick Add Row */}
       {showQuickAdd && (
-        <div className="glass-card backdrop-blur-xl border border-blue-300 shadow-glass-lg rounded-glass-lg p-4 bg-blue-50/50">
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-blue-300 shadow-glass-lg rounded-lg-lg p-4 bg-blue-50/50">
           <div className="flex items-center space-x-3">
             <input
               type="text"
@@ -414,8 +414,8 @@ const PeopleTableView = ({
 
       {/* Bulk Import Modal */}
       {bulkImportMode && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 max-w-4xl w-full max-h-[80vh] overflow-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-bold text-gray-900">Bulk Import Preview</h3>
               <button
@@ -453,7 +453,7 @@ const PeopleTableView = ({
               </button>
               <button
                 onClick={processBulkImport}
-                className="px-6 py-2 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all flex items-center space-x-2"
+                className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all flex items-center space-x-2"
               >
                 <Upload className="w-4 h-4" />
                 <span>Import {bulkData.split('\n').length - 1} People</span>
@@ -464,7 +464,7 @@ const PeopleTableView = ({
       )}
 
       {/* Table */}
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
@@ -575,7 +575,7 @@ const PeopleTableView = ({
                         placeholder="Case name"
                       />
                     ) : (
-                      <span className="text-sm text-gray-600">{person.case_name || '-'}</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{person.case_name || '-'}</span>
                     )}
                   </td>
 
@@ -649,7 +649,7 @@ const PeopleTableView = ({
           </table>
 
           {people.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
+            <div className="text-center py-12 text-gray-500 dark:text-gray-400">
               <UserPlus className="w-12 h-12 mx-auto mb-3 text-gray-400" />
               <p>No people added yet. Click "Quick Add" to get started!</p>
             </div>

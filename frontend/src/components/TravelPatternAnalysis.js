@@ -167,7 +167,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Loading travel data...</p>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading travel data...</p>
         </div>
       </div>
     );
@@ -415,13 +415,13 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
                           {travel.city}, {travel.country}
                         </h5>
                         {travel.transportation_mode && (
-                          <span className="text-gray-500">
+                          <span className="text-gray-500 dark:text-gray-400">
                             {getTransportIcon(travel.transportation_mode)}
                           </span>
                         )}
                       </div>
                       {travel.location_name && (
-                        <p className="text-sm text-gray-600">{travel.location_name}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{travel.location_name}</p>
                       )}
                       <div className="flex items-center space-x-4 text-sm text-gray-500 mt-1">
                         <span className="flex items-center">
@@ -552,7 +552,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Countries Visited</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Countries Visited</p>
                   <p className="text-2xl font-bold text-blue-600">
                     {travelData.statistics?.countries_visited || 0}
                   </p>
@@ -564,7 +564,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Cities Visited</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Cities Visited</p>
                   <p className="text-2xl font-bold text-green-600">
                     {travelData.statistics?.cities_visited || 0}
                   </p>
@@ -576,7 +576,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Total Trips</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Total Trips</p>
                   <p className="text-2xl font-bold text-purple-600">
                     {travelData.statistics?.total_trips || 0}
                   </p>
@@ -588,7 +588,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
             <div className="bg-white rounded-lg shadow-sm p-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600">Avg Trip Duration</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Avg Trip Duration</p>
                   <p className="text-2xl font-bold text-orange-600">
                     {Math.round(travelData.statistics?.avg_trip_duration || 0)} days
                   </p>
@@ -613,7 +613,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
                         <p className="font-medium">{location.city}, {location.country}</p>
                       </div>
                     </div>
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
                       {location.visit_count} visit{location.visit_count > 1 ? 's' : ''}
                     </div>
                   </div>
@@ -637,7 +637,7 @@ const TravelPatternAnalysis = ({ personId, personName }) => {
                     <div key={index} className="space-y-1">
                       <div className="flex justify-between text-sm">
                         <span className="font-medium">{purposeLabel}</span>
-                        <span className="text-gray-600">{purpose.count} trips ({percentage}%)</span>
+                        <span className="text-gray-600 dark:text-gray-400">{purpose.count} trips ({percentage}%)</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div

@@ -531,6 +531,7 @@ app.use(session({
 
 // Import audit logging middleware
 const { auditMiddleware } = require('./middleware/auditLog');
+const { requireAuth, requireAdmin } = require('./middleware/auth');
 app.use(auditMiddleware);
 
 // Audit logging function (keeping for backwards compatibility)
@@ -590,7 +591,7 @@ app.get('/api/health', async (req, res) => {
   }
 });
 
-app.post('/api/upload/logo', logoUpload.single('appLogo'), (req, res) => {
+app.post('/api/upload/logo', requireAdmin, logoUpload.single('appLogo'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded or file type incorrect.' });
   }
@@ -599,7 +600,7 @@ app.post('/api/upload/logo', logoUpload.single('appLogo'), (req, res) => {
 });
 
 // Universal search endpoint
-app.get('/api/search', async (req, res) => {
+app.get('/api/search', requireAuth, async (req, res) => {
   const { q } = req.query;
   if (!q || q.length < 2) {
     return res.json({ people: [], tools: [] });
@@ -724,7 +725,7 @@ app.get('/api/search/advanced', async (req, res) => {
 });
 
 // Cases endpoints
-app.get('/api/cases', async (req, res) => {
+app.get('/api/cases', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM cases ORDER BY case_name ASC');
     res.json(result.rows);
@@ -734,7 +735,7 @@ app.get('/api/cases', async (req, res) => {
   }
 });
 
-app.post('/api/cases', async (req, res) => {
+app.post('/api/cases', requireAuth, async (req, res) => {
   const { case_name, description } = req.body;
   if (!case_name) return res.status(400).json({ error: 'Case name is required' });
   
@@ -754,7 +755,7 @@ app.post('/api/cases', async (req, res) => {
 });
 
 // Update case endpoint
-app.put('/api/cases/:id', async (req, res) => {
+app.put('/api/cases/:id', requireAuth, async (req, res) => {
   const caseId = parseInt(req.params.id, 10);
   const { case_name, description, status } = req.body;
   
@@ -775,7 +776,7 @@ app.put('/api/cases/:id', async (req, res) => {
 });
 
 // Delete case endpoint
-app.delete('/api/cases/:id', async (req, res) => {
+app.delete('/api/cases/:id', requireAuth, async (req, res) => {
   const caseId = parseInt(req.params.id, 10);
   if (isNaN(caseId)) return res.status(400).json({ error: 'Invalid case ID' });
   
@@ -790,7 +791,7 @@ app.delete('/api/cases/:id', async (req, res) => {
 });
 
 // People endpoints with audit logging
-app.get('/api/people', async (req, res) => {
+app.get('/api/people', requireAuth, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT *,
@@ -805,7 +806,7 @@ app.get('/api/people', async (req, res) => {
   }
 });
 
-app.post('/api/people', async (req, res) => {
+app.post('/api/people', requireAuth, async (req, res) => {
   const { firstName, lastName, aliases, dateOfBirth, category, status, crmStatus, caseName, profilePictureUrl, notes, osintData, attachments, connections, locations, custom_fields } = req.body;
   if (!firstName) return res.status(400).json({ error: 'First name is required' });
   
@@ -889,7 +890,7 @@ app.post('/api/people', async (req, res) => {
   }
 });
 
-app.put('/api/people/:id', async (req, res) => {
+app.put('/api/people/:id', requireAuth, async (req, res) => {
   const personId = parseInt(req.params.id, 10);
   const { firstName, lastName, aliases, dateOfBirth, category, status, crmStatus, caseName, profilePictureUrl, notes, osintData, attachments, connections, locations, custom_fields } = req.body;
   
@@ -993,7 +994,7 @@ app.put('/api/people/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/people/:id', async (req, res) => {
+app.delete('/api/people/:id', requireAuth, async (req, res) => {
   const personId = parseInt(req.params.id, 10);
   if (isNaN(personId)) return res.status(400).json({ error: 'Invalid person ID' });
   
@@ -1115,7 +1116,7 @@ app.get('/api/locations', async (req, res) => {
 });
 
 // Travel History endpoints
-app.get('/api/people/:id/travel-history', async (req, res) => {
+app.get('/api/people/:id/travel-history', requireAuth, async (req, res) => {
   const personId = parseInt(req.params.id, 10);
   if (isNaN(personId)) return res.status(400).json({ error: 'Invalid person ID' });
   
@@ -1133,7 +1134,7 @@ app.get('/api/people/:id/travel-history', async (req, res) => {
   }
 });
 
-app.post('/api/people/:id/travel-history', async (req, res) => {
+app.post('/api/people/:id/travel-history', requireAuth, async (req, res) => {
   const personId = parseInt(req.params.id, 10);
   if (isNaN(personId)) return res.status(400).json({ error: 'Invalid person ID' });
   
@@ -1316,7 +1317,7 @@ app.get('/api/geocode/stats', async (req, res) => {
   }
 });
 
-app.put('/api/travel-history/:id', async (req, res) => {
+app.put('/api/travel-history/:id', requireAuth, async (req, res) => {
   const travelId = parseInt(req.params.id, 10);
   if (isNaN(travelId)) return res.status(400).json({ error: 'Invalid travel ID' });
   
@@ -1346,7 +1347,7 @@ app.put('/api/travel-history/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/travel-history/:id', async (req, res) => {
+app.delete('/api/travel-history/:id', requireAuth, async (req, res) => {
   const travelId = parseInt(req.params.id, 10);
   if (isNaN(travelId)) return res.status(400).json({ error: 'Invalid travel ID' });
   
@@ -1361,7 +1362,7 @@ app.delete('/api/travel-history/:id', async (req, res) => {
 });
 
 // Travel pattern analysis endpoint
-app.get('/api/people/:id/travel-analysis', async (req, res) => {
+app.get('/api/people/:id/travel-analysis', requireAuth, async (req, res) => {
   const personId = parseInt(req.params.id, 10);
   if (isNaN(personId)) return res.status(400).json({ error: 'Invalid person ID' });
   
@@ -1433,7 +1434,7 @@ app.get('/api/people/:id/travel-analysis', async (req, res) => {
 });
 
 // Tools endpoints
-app.get('/api/tools', async (req, res) => {
+app.get('/api/tools', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM tools ORDER BY name ASC');
     res.json(result.rows);
@@ -1443,7 +1444,7 @@ app.get('/api/tools', async (req, res) => {
   }
 });
 
-app.post('/api/tools', async (req, res) => {
+app.post('/api/tools', requireAuth, async (req, res) => {
   const { name, link, description, category, status, tags, notes } = req.body;
   if (!name) return res.status(400).json({ error: 'Tool name is required' });
   
@@ -1459,7 +1460,7 @@ app.post('/api/tools', async (req, res) => {
   }
 });
 
-app.put('/api/tools/:id', async (req, res) => {
+app.put('/api/tools/:id', requireAuth, async (req, res) => {
   const toolId = parseInt(req.params.id, 10);
   const { name, link, description, category, status, tags, notes } = req.body;
   
@@ -1479,7 +1480,7 @@ app.put('/api/tools/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/tools/:id', async (req, res) => {
+app.delete('/api/tools/:id', requireAuth, async (req, res) => {
   const toolId = parseInt(req.params.id, 10);
   if (isNaN(toolId)) return res.status(400).json({ error: 'Invalid tool ID' });
   
@@ -1494,7 +1495,7 @@ app.delete('/api/tools/:id', async (req, res) => {
 });
 
 // Todos endpoints
-app.get('/api/todos', async (req, res) => {
+app.get('/api/todos', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM todos ORDER BY created_at DESC');
     res.json(result.rows);
@@ -1504,7 +1505,7 @@ app.get('/api/todos', async (req, res) => {
   }
 });
 
-app.post('/api/todos', async (req, res) => {
+app.post('/api/todos', requireAuth, async (req, res) => {
   const { text, status, last_update_comment } = req.body;
   if (!text) return res.status(400).json({ error: 'Todo text is required' });
   
@@ -1520,7 +1521,7 @@ app.post('/api/todos', async (req, res) => {
   }
 });
 
-app.put('/api/todos/:id', async (req, res) => {
+app.put('/api/todos/:id', requireAuth, async (req, res) => {
   const todoId = parseInt(req.params.id, 10);
   const { text, status, last_update_comment } = req.body;
   
@@ -1540,7 +1541,7 @@ app.put('/api/todos/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/todos/:id', async (req, res) => {
+app.delete('/api/todos/:id', requireAuth, async (req, res) => {
   const todoId = parseInt(req.params.id, 10);
   if (isNaN(todoId)) return res.status(400).json({ error: 'Invalid todo ID' });
   
@@ -1555,7 +1556,7 @@ app.delete('/api/todos/:id', async (req, res) => {
 });
 
 // Custom fields endpoints
-app.get('/api/settings/custom-fields', async (req, res) => {
+app.get('/api/settings/custom-fields', requireAdmin, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM custom_person_fields ORDER BY field_label ASC');
     res.json(result.rows);
@@ -1565,7 +1566,7 @@ app.get('/api/settings/custom-fields', async (req, res) => {
   }
 });
 
-app.post('/api/settings/custom-fields', async (req, res) => {
+app.post('/api/settings/custom-fields', requireAdmin, async (req, res) => {
   const { field_name, field_label, field_type, options, is_active } = req.body;
   if (!field_name || !field_label || !field_type) {
     return res.status(400).json({ error: 'field_name, field_label, and field_type are required' });
@@ -1589,7 +1590,7 @@ app.post('/api/settings/custom-fields', async (req, res) => {
   }
 });
 
-app.put('/api/settings/custom-fields/:id', async (req, res) => {
+app.put('/api/settings/custom-fields/:id', requireAdmin, async (req, res) => {
   const fieldId = parseInt(req.params.id, 10);
   const { field_label, field_type, options, is_active } = req.body;
   
@@ -1611,7 +1612,7 @@ app.put('/api/settings/custom-fields/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/settings/custom-fields/:id', async (req, res) => {
+app.delete('/api/settings/custom-fields/:id', requireAdmin, async (req, res) => {
   const fieldId = parseInt(req.params.id, 10);
   if (isNaN(fieldId)) return res.status(400).json({ error: 'Invalid field ID' });
   
@@ -1626,7 +1627,7 @@ app.delete('/api/settings/custom-fields/:id', async (req, res) => {
 });
 
 // Model options endpoints
-app.get('/api/settings/model-options', async (req, res) => {
+app.get('/api/settings/model-options', requireAdmin, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM model_options ORDER BY model_type, display_order ASC');
     res.json(result.rows);
@@ -1636,7 +1637,7 @@ app.get('/api/settings/model-options', async (req, res) => {
   }
 });
 
-app.post('/api/settings/model-options', async (req, res) => {
+app.post('/api/settings/model-options', requireAdmin, async (req, res) => {
   const { model_type, option_value, option_label, display_order } = req.body;
   
   if (!model_type || !option_value || !option_label) {
@@ -1659,7 +1660,7 @@ app.post('/api/settings/model-options', async (req, res) => {
   }
 });
 
-app.put('/api/settings/model-options/:id', async (req, res) => {
+app.put('/api/settings/model-options/:id', requireAdmin, async (req, res) => {
   const optionId = parseInt(req.params.id, 10);
   const { option_label, is_active, display_order } = req.body;
   
@@ -1683,7 +1684,7 @@ app.put('/api/settings/model-options/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/settings/model-options/:id', async (req, res) => {
+app.delete('/api/settings/model-options/:id', requireAdmin, async (req, res) => {
   const optionId = parseInt(req.params.id, 10);
   if (isNaN(optionId)) return res.status(400).json({ error: 'Invalid option ID' });
   
@@ -1728,7 +1729,7 @@ app.get('/api/audit-logs', async (req, res) => {
 });
 
 // Export/Import endpoints
-app.get('/api/export', async (req, res) => {
+app.get('/api/export', requireAdmin, async (req, res) => {
   try {
     const [people, tools, todos, customFields, modelOptions, cases, travelHistory, businesses] = await Promise.all([
       pool.query('SELECT * FROM people'),
@@ -1765,7 +1766,7 @@ app.get('/api/export', async (req, res) => {
   }
 });
 
-app.post('/api/import', async (req, res) => {
+app.post('/api/import', requireAdmin, async (req, res) => {
   const importData = req.body;
   
   if (!importData || !importData.version || !importData.data) {
@@ -2035,7 +2036,7 @@ app.get('/api/docker/logs', async (req, res) => {
 });
 
 // Businesses endpoints
-app.get('/api/businesses', async (req, res) => {
+app.get('/api/businesses', requireAuth, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -2052,7 +2053,7 @@ app.get('/api/businesses', async (req, res) => {
   }
 });
 
-app.post('/api/businesses', async (req, res) => {
+app.post('/api/businesses', requireAuth, async (req, res) => {
   try {
     const {
       name, type, industry, address, city, state, country, postal_code,
@@ -2130,7 +2131,7 @@ app.post('/api/businesses', async (req, res) => {
   }
 });
 
-app.put('/api/businesses/:id', async (req, res) => {
+app.put('/api/businesses/:id', requireAuth, async (req, res) => {
   try {
     const businessId = parseInt(req.params.id, 10);
     if (isNaN(businessId)) {
@@ -2215,7 +2216,7 @@ app.put('/api/businesses/:id', async (req, res) => {
   }
 });
 
-app.delete('/api/businesses/:id', async (req, res) => {
+app.delete('/api/businesses/:id', requireAuth, async (req, res) => {
   try {
     const businessId = parseInt(req.params.id, 10);
     if (isNaN(businessId)) {
@@ -2311,7 +2312,7 @@ app.get('/api/system/health', async (req, res) => {
 // ===== WIRELESS NETWORKS API (WiGLE Integration) =====
 
 // Get all wireless networks
-app.get('/api/wireless-networks', async (req, res) => {
+app.get('/api/wireless-networks', requireAuth, async (req, res) => {
   try {
     const { person_id, ssid, bssid, network_type, encryption, import_source, signal_min, signal_max } = req.query;
 
@@ -2370,7 +2371,7 @@ app.get('/api/wireless-networks', async (req, res) => {
 });
 
 // Get single wireless network
-app.get('/api/wireless-networks/:id', async (req, res) => {
+app.get('/api/wireless-networks/:id', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM wireless_networks WHERE id = $1', [req.params.id]);
     if (result.rows.length === 0) {
@@ -2384,7 +2385,7 @@ app.get('/api/wireless-networks/:id', async (req, res) => {
 });
 
 // Create wireless network (manual entry)
-app.post('/api/wireless-networks', async (req, res) => {
+app.post('/api/wireless-networks', requireAuth, async (req, res) => {
   try {
     const {
       ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
@@ -2419,7 +2420,7 @@ app.post('/api/wireless-networks', async (req, res) => {
 });
 
 // Update wireless network
-app.put('/api/wireless-networks/:id', async (req, res) => {
+app.put('/api/wireless-networks/:id', requireAuth, async (req, res) => {
   try {
     const {
       ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
@@ -2454,7 +2455,7 @@ app.put('/api/wireless-networks/:id', async (req, res) => {
 });
 
 // Delete wireless network
-app.delete('/api/wireless-networks/:id', async (req, res) => {
+app.delete('/api/wireless-networks/:id', requireAuth, async (req, res) => {
   try {
     const result = await pool.query('DELETE FROM wireless_networks WHERE id = $1 RETURNING *', [req.params.id]);
     if (result.rows.length === 0) {
@@ -2468,7 +2469,7 @@ app.delete('/api/wireless-networks/:id', async (req, res) => {
 });
 
 // Bulk delete wireless networks
-app.post('/api/wireless-networks/bulk-delete', async (req, res) => {
+app.post('/api/wireless-networks/bulk-delete', requireAdmin, async (req, res) => {
   try {
     const { ids } = req.body;
     if (!ids || !Array.isArray(ids) || ids.length === 0) {
@@ -2489,7 +2490,7 @@ app.post('/api/wireless-networks/bulk-delete', async (req, res) => {
 });
 
 // Import WiGLE KML file
-app.post('/api/wireless-networks/import-kml', multer({ storage: multer.memoryStorage() }).single('kmlFile'), async (req, res) => {
+app.post('/api/wireless-networks/import-kml', requireAuth, multer({ storage: multer.memoryStorage() }).single('kmlFile'), async (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: 'KML file is required' });
@@ -2578,7 +2579,7 @@ app.post('/api/wireless-networks/import-kml', multer({ storage: multer.memorySto
 });
 
 // Get wireless network statistics
-app.get('/api/wireless-networks/stats', async (req, res) => {
+app.get('/api/wireless-networks/stats', requireAuth, async (req, res) => {
   try {
     const stats = await pool.query(`
       SELECT
@@ -2618,7 +2619,7 @@ app.get('/api/wireless-networks/stats', async (req, res) => {
 });
 
 // Search for networks near a location
-app.get('/api/wireless-networks/nearby', async (req, res) => {
+app.get('/api/wireless-networks/nearby', requireAuth, async (req, res) => {
   try {
     const { latitude, longitude, radius = 0.5 } = req.query; // radius in km
 
@@ -2647,7 +2648,7 @@ app.get('/api/wireless-networks/nearby', async (req, res) => {
 });
 
 // Associate wireless network with person
-app.post('/api/wireless-networks/:id/associate', async (req, res) => {
+app.post('/api/wireless-networks/:id/associate', requireAuth, async (req, res) => {
   try {
     const { person_id, association_note, association_confidence } = req.body;
 
@@ -2670,7 +2671,7 @@ app.post('/api/wireless-networks/:id/associate', async (req, res) => {
 });
 
 // Remove association from wireless network
-app.delete('/api/wireless-networks/:id/associate', async (req, res) => {
+app.delete('/api/wireless-networks/:id/associate', requireAuth, async (req, res) => {
   try {
     const result = await pool.query(
       `UPDATE wireless_networks

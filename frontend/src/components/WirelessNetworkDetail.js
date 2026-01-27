@@ -188,12 +188,12 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-slate-800 rounded-glass-lg shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/70 dark:bg-black/70 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-slate-800 rounded-lg-lg shadow-2xl w-full max-w-3xl mx-4 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-glass bg-gradient-primary flex items-center justify-center">
+            <div className="w-12 h-12 rounded-lg bg-gradient-primary flex items-center justify-center">
               {getNetworkTypeIcon()}
             </div>
             <div className="flex-1 min-w-0">
@@ -207,7 +207,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-glass-sm transition-colors"
+            className="p-2 hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg-sm transition-colors"
           >
             <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
@@ -215,7 +215,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
 
         {/* Error Message */}
         {error && (
-          <div className="m-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-glass-lg">
+          <div className="m-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg-lg">
             <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
           </div>
         )}
@@ -232,7 +232,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                 <button
                   onClick={() => setEditing(true)}
                   className="flex items-center space-x-2 px-3 py-1.5 text-sm font-medium text-blue-600 dark:text-blue-400
-                           hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-glass transition-colors"
+                           hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                 >
                   <Edit2 className="w-4 h-4" />
                   <span>Edit</span>
@@ -252,7 +252,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     name="ssid"
                     value={formData.ssid}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -266,7 +266,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     name="encryption"
                     value={formData.encryption}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   >
                     <option value="">Unknown</option>
@@ -289,7 +289,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     value={formData.signal_strength}
                     onChange={handleInputChange}
                     placeholder="-65"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -306,7 +306,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                       value={formData.frequency}
                       onChange={handleInputChange}
                       placeholder="2.4GHz"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                                bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                     />
                   </div>
@@ -320,7 +320,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                       value={formData.channel}
                       onChange={handleInputChange}
                       placeholder="6"
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                                bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                     />
                   </div>
@@ -337,7 +337,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     value={formData.area_name}
                     onChange={handleInputChange}
                     placeholder="e.g., Downtown District"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -353,7 +353,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     value={formData.tags}
                     onChange={handleInputChange}
                     placeholder="surveillance, target-area"
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -368,7 +368,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     value={formData.notes}
                     onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -379,7 +379,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     onClick={() => setEditing(false)}
                     disabled={saving}
                     className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300
-                             hover:bg-gray-100 dark:hover:bg-slate-700 rounded-glass-lg transition-colors"
+                             hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -387,7 +387,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     onClick={handleSave}
                     disabled={saving}
                     className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white
-                             bg-gradient-primary rounded-glass-lg hover:shadow-glow-lg transition-all
+                             bg-gradient-primary rounded-lg-lg hover:shadow-glow-lg transition-all
                              disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
@@ -454,7 +454,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                       {network.latitude.toFixed(6)}, {network.longitude.toFixed(6)}
                     </p>
                     {network.accuracy && (
-                      <p className="text-xs text-gray-500 dark:text-gray-500">
+                      <p className="text-xs text-gray-500 dark:text-gray-500 dark:text-gray-400">
                         Accuracy: ±{network.accuracy}m
                       </p>
                     )}
@@ -493,7 +493,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                         <span
                           key={idx}
                           className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-slate-700
-                                   text-gray-700 dark:text-gray-300 rounded-glass-sm"
+                                   text-gray-700 dark:text-gray-300 rounded-lg-sm"
                         >
                           {tag}
                         </span>
@@ -507,7 +507,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                   <div className="col-span-2">
                     <p className="text-xs text-gray-600 dark:text-gray-400 mb-1">Notes</p>
                     <p className="text-sm text-gray-900 dark:text-gray-100 bg-gray-50 dark:bg-slate-700/50
-                               p-3 rounded-glass">
+                               p-3 rounded-lg">
                       {network.notes}
                     </p>
                   </div>
@@ -521,7 +521,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
               Location Preview
             </h3>
-            <div className="h-64 rounded-glass-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+            <div className="h-64 rounded-lg-lg overflow-hidden border border-gray-200 dark:border-gray-700">
               <MapContainer
                 center={[network.latitude, network.longitude]}
                 zoom={16}
@@ -536,7 +536,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                   <Popup>
                     <div className="p-2">
                       <p className="font-semibold text-sm">{network.ssid}</p>
-                      <p className="text-xs text-gray-600">{network.bssid}</p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400">{network.bssid}</p>
                       <p className="text-xs text-gray-500 mt-1">
                         {network.latitude.toFixed(6)}, {network.longitude.toFixed(6)}
                       </p>
@@ -561,7 +561,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                 <button
                   onClick={() => setAssociating(true)}
                   className="flex items-center space-x-2 px-3 py-1.5 text-sm font-medium text-blue-600 dark:text-blue-400
-                           hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-glass transition-colors"
+                           hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
                 >
                   <User className="w-4 h-4" />
                   <span>Associate Person</span>
@@ -570,7 +570,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
             </div>
 
             {network.person_id && !associating ? (
-              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-glass-lg">
+              <div className="p-4 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg-lg">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <p className="text-sm font-medium text-purple-900 dark:text-purple-200">
@@ -608,7 +608,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     name="person_id"
                     value={associationData.person_id}
                     onChange={handleAssociationChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   >
                     <option value="">-- Select Person --</option>
@@ -629,7 +629,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     name="association_confidence"
                     value={associationData.association_confidence}
                     onChange={handleAssociationChange}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   >
                     <option value="investigating">Investigating</option>
@@ -650,7 +650,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     onChange={handleAssociationChange}
                     rows={3}
                     placeholder="Why this network is associated with this person..."
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-glass-lg
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg-lg
                              bg-white dark:bg-slate-700 text-gray-900 dark:text-gray-100"
                   />
                 </div>
@@ -661,7 +661,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     onClick={() => setAssociating(false)}
                     disabled={saving}
                     className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300
-                             hover:bg-gray-100 dark:hover:bg-slate-700 rounded-glass-lg transition-colors"
+                             hover:bg-gray-100 dark:hover:bg-slate-700 rounded-lg-lg transition-colors"
                   >
                     Cancel
                   </button>
@@ -669,7 +669,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
                     onClick={handleSaveAssociation}
                     disabled={saving || !associationData.person_id}
                     className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white
-                             bg-gradient-primary rounded-glass-lg hover:shadow-glow-lg transition-all
+                             bg-gradient-primary rounded-lg-lg hover:shadow-glow-lg transition-all
                              disabled:opacity-50"
                   >
                     <Save className="w-4 h-4" />
@@ -690,7 +690,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
           <button
             onClick={handleDelete}
             className="flex items-center space-x-2 px-4 py-2 text-sm font-medium text-red-600 dark:text-red-400
-                     hover:bg-red-50 dark:hover:bg-red-900/20 rounded-glass-lg transition-colors"
+                     hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg-lg transition-colors"
           >
             <Trash2 className="w-4 h-4" />
             <span>Delete Network</span>
@@ -699,7 +699,7 @@ const WirelessNetworkDetail = ({ network, onClose, onUpdate, onDelete, people = 
           <button
             onClick={onClose}
             className="px-6 py-2 text-sm font-medium text-white bg-gradient-primary
-                     rounded-glass-lg hover:shadow-glow-lg transition-all"
+                     rounded-lg-lg hover:shadow-glow-lg transition-all"
           >
             Close
           </button>

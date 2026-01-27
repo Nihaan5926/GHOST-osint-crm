@@ -1105,7 +1105,7 @@ const AdvancedSearch = ({ onSelectPerson, onClose }) => {
             ) : (
               <div className="text-center py-12">
                 <Search className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-500 dark:text-gray-500">
+                <p className="text-gray-500 dark:text-gray-500 dark:text-gray-400">
                   {totalResults === 0 && searchParams.searchText ? 
                     'No results found. Try adjusting your search criteria.' : 
                     'Use the filters on the left to search for people.'}

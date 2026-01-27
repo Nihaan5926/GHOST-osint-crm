@@ -149,7 +149,7 @@ const WirelessNetworks = () => {
       case 'CELL':
         return <Radio className="w-4 h-4 text-purple-600 dark:text-purple-400" />;
       default:
-        return <Wifi className="w-4 h-4 text-accent-primary" />;
+        return <Wifi className="w-4 h-4 text-blue-600 dark:text-blue-400" />;
     }
   };
 
@@ -184,14 +184,14 @@ const WirelessNetworks = () => {
         <div className="flex gap-2">
           <button
             onClick={() => setShowImportModal(true)}
-            className="px-4 py-2 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all duration-300 flex items-center"
+            className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all duration-300 flex items-center"
           >
             <Upload className="w-4 h-4 mr-2" />
             Import KML
           </button>
           <button
             onClick={fetchNetworks}
-            className="px-4 py-2 glass-button rounded-glass text-gray-700 dark:text-gray-300 hover:shadow-glow-sm transition-all duration-300"
+            className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:shadow-md transition-all duration-300"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -201,17 +201,17 @@ const WirelessNetworks = () => {
       {/* Statistics Cards */}
       {stats && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total Networks</p>
                 <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{stats.total || 0}</p>
               </div>
-              <Wifi className="w-8 h-8 text-accent-primary" />
+              <Wifi className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
 
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Unique SSIDs</p>
@@ -221,7 +221,7 @@ const WirelessNetworks = () => {
             </div>
           </div>
 
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Associated</p>
@@ -231,7 +231,7 @@ const WirelessNetworks = () => {
             </div>
           </div>
 
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Encrypted</p>
@@ -244,7 +244,7 @@ const WirelessNetworks = () => {
       )}
 
       {/* Search and Filters */}
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-4">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-4">
         <div className="space-y-4">
           {/* Row 1: Search and Type/Encryption */}
           <div className="flex flex-col md:flex-row gap-4">
@@ -255,14 +255,14 @@ const WirelessNetworks = () => {
                 placeholder="Search by SSID or BSSID..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+                className="w-full pl-10 pr-4 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
               />
             </div>
 
             <select
               value={filters.network_type}
               onChange={(e) => setFilters({ ...filters, network_type: e.target.value })}
-              className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+              className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
             >
               <option value="">All Types</option>
               <option value="WIFI">WiFi</option>
@@ -274,7 +274,7 @@ const WirelessNetworks = () => {
             <select
               value={filters.encryption}
               onChange={(e) => setFilters({ ...filters, encryption: e.target.value })}
-              className="px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+              className="px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
             >
               <option value="">All Encryption</option>
               <option value="WPA3">WPA3</option>
@@ -297,7 +297,7 @@ const WirelessNetworks = () => {
                 placeholder="Min"
                 value={filters.signal_min}
                 onChange={(e) => setFilters({ ...filters, signal_min: e.target.value })}
-                className="w-24 px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+                className="w-24 px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
               />
               <span className="text-gray-600 dark:text-gray-400">to</span>
               <input
@@ -305,14 +305,14 @@ const WirelessNetworks = () => {
                 placeholder="Max"
                 value={filters.signal_max}
                 onChange={(e) => setFilters({ ...filters, signal_max: e.target.value })}
-                className="w-24 px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+                className="w-24 px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
               />
             </div>
 
             <select
               value={filters.person_id}
               onChange={(e) => setFilters({ ...filters, person_id: e.target.value })}
-              className="flex-1 px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+              className="flex-1 px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
             >
               <option value="">All People</option>
               {people.map(person => (
@@ -325,7 +325,7 @@ const WirelessNetworks = () => {
             <select
               value={filters.import_source}
               onChange={(e) => setFilters({ ...filters, import_source: e.target.value })}
-              className="flex-1 px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
+              className="flex-1 px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary dark:text-gray-100 dark:bg-slate-700"
             >
               <option value="">All KML Files</option>
               {importSources.map((source, idx) => (
@@ -340,20 +340,20 @@ const WirelessNetworks = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setViewMode('list')}
-              className={`px-3 py-2 rounded-glass transition-all ${
+              className={`px-3 py-2 rounded-lg transition-all ${
                 viewMode === 'list'
-                  ? 'bg-gradient-primary text-white'
-                  : 'glass-button text-gray-700 dark:text-gray-300'
+                  ? 'bg-blue-600 text-white dark:bg-blue-500'
+                  : 'bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300'
               }`}
             >
               <List className="w-5 h-5" />
             </button>
             <button
               onClick={() => setViewMode('map')}
-              className={`px-3 py-2 rounded-glass transition-all ${
+              className={`px-3 py-2 rounded-lg transition-all ${
                 viewMode === 'map'
-                  ? 'bg-gradient-primary text-white'
-                  : 'glass-button text-gray-700 dark:text-gray-300'
+                  ? 'bg-blue-600 text-white dark:bg-blue-500'
+                  : 'bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300'
               }`}
             >
               <MapIcon className="w-5 h-5" />
@@ -362,13 +362,13 @@ const WirelessNetworks = () => {
         </div>
 
         {selectedNetworks.length > 0 && (
-          <div className="mt-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-glass p-3">
+          <div className="mt-4 flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3">
             <span className="text-sm text-blue-800 dark:text-blue-300">
               {selectedNetworks.length} network(s) selected
             </span>
             <button
               onClick={handleBulkDelete}
-              className="px-3 py-1 bg-red-600 text-white rounded-glass hover:bg-red-700 transition-all text-sm flex items-center"
+              className="px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all text-sm flex items-center"
             >
               <Trash2 className="w-4 h-4 mr-1" />
               Delete Selected
@@ -379,8 +379,8 @@ const WirelessNetworks = () => {
 
       {/* View Content */}
       {loading ? (
-        <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-12 text-center">
-          <RefreshCw className="w-8 h-8 animate-spin text-accent-primary mx-auto mb-4" />
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-12 text-center">
+          <RefreshCw className="w-8 h-8 animate-spin text-blue-600 dark:text-blue-400 mx-auto mb-4" />
           <p className="text-gray-600 dark:text-gray-400">Loading networks...</p>
         </div>
       ) : viewMode === 'map' ? (
@@ -389,7 +389,7 @@ const WirelessNetworks = () => {
           onNetworkClick={setSelectedNetwork}
         />
       ) : (
-        <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg overflow-hidden">
           {filteredNetworks.length === 0 ? (
             <div className="p-12 text-center">
               <Wifi className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
@@ -461,7 +461,7 @@ const WirelessNetworks = () => {
                       </td>
                       <td className="px-4 py-3">
                         {network.person_id && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-glass text-xs bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300">
+                          <span className="inline-flex items-center px-2 py-1 rounded-lg text-xs bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-300">
                             <User className="w-3 h-3 mr-1" />
                             Associated
                           </span>

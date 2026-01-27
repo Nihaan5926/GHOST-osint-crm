@@ -180,7 +180,7 @@ const WirelessNetworkMap = ({ networks, onNetworkClick, people = [] }) => {
 
   if (!networks || networks.length === 0) {
     return (
-      <div className="h-96 bg-gray-100 dark:bg-slate-800 rounded-glass-lg flex items-center justify-center">
+      <div className="h-96 bg-gray-100 dark:bg-slate-800 rounded-lg-lg flex items-center justify-center">
         <div className="text-center">
           <Wifi className="w-12 h-12 text-gray-400 dark:text-gray-600 mx-auto mb-3" />
           <p className="text-gray-600 dark:text-gray-400">No networks to display on map</p>
@@ -193,7 +193,7 @@ const WirelessNetworkMap = ({ networks, onNetworkClick, people = [] }) => {
   }
 
   return (
-    <div className="h-[600px] rounded-glass-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
+    <div className="h-[600px] rounded-lg-lg overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
       <MapContainer
         center={center}
         zoom={13}
@@ -367,7 +367,7 @@ const WirelessNetworkMap = ({ networks, onNetworkClick, people = [] }) => {
       </MapContainer>
 
       {/* Map Legend */}
-      <div className="absolute bottom-4 left-4 bg-white dark:bg-slate-800 rounded-glass-lg shadow-lg p-3 z-[1000] border border-gray-200 dark:border-gray-700">
+      <div className="absolute bottom-4 left-4 bg-white dark:bg-slate-800 rounded-lg-lg shadow-lg p-3 z-[1000] border border-gray-200 dark:border-gray-700">
         <p className="text-xs font-semibold text-gray-900 dark:text-gray-100 mb-2">Network Types</p>
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2">

@@ -479,7 +479,7 @@ const RelationshipManager = ({
           <h3 className="text-lg font-semibold">
             {personId ? 'Person Relationships' : 'Global Relationship Network'}
           </h3>
-          <span className="text-sm text-gray-500 dark:text-gray-500">
+          <span className="text-sm text-gray-500 dark:text-gray-500 dark:text-gray-400">
             ({filteredPeople.length} entities: {filteredPeople.filter(e => !e.type || e.type !== 'business').length} people, {filteredPeople.filter(e => e.type === 'business').length} businesses)
           </span>
         </div>

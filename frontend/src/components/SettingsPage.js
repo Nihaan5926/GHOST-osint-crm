@@ -146,9 +146,10 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
   const fetchAuditLogs = async () => {
     try {
       const data = await auditAPI.getAll({ limit: 100 });
-      setAuditLogs(data);
+      setAuditLogs(data.logs || []);
     } catch (error) {
       console.error('Error fetching audit logs:', error);
+      setAuditLogs([]);
     }
   };
 
@@ -520,7 +521,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                         onChange={(e) => setOptionForm({ ...optionForm, is_active: e.target.checked })}
                         className="h-4 w-4 text-blue-600 rounded"
                       />
-                      <label htmlFor="new_is_active" className="ml-2 text-sm text-gray-700">
+                      <label htmlFor="new_is_active" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                         Active (show this option in forms)
                       </label>
                     </div>
@@ -559,8 +560,8 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                           ) : (
                             <ChevronRight className="w-4 h-4 text-gray-500" />
                           )}
-                          <h4 className="font-medium text-gray-700">{label}</h4>
-                          <span className="text-sm text-gray-500">({typeOptions.length} options)</span>
+                          <h4 className="font-medium text-gray-700 dark:text-gray-300">{label}</h4>
+                          <span className="text-sm text-gray-500 dark:text-gray-400">({typeOptions.length} options)</span>
                         </div>
                       </button>
                       
@@ -574,10 +575,10 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                               .map(option => (
                                 <div key={option.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                   <div className="flex items-center space-x-3">
-                                    <span className="text-sm text-gray-500">#{option.display_order}</span>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">#{option.display_order}</span>
                                     <div>
                                       <div className="font-medium">{option.option_label}</div>
-                                      <div className="text-sm text-gray-600">Value: {option.option_value}</div>
+                                      <div className="text-sm text-gray-600 dark:text-gray-400">Value: {option.option_value}</div>
                                     </div>
                                   </div>
                                   <div className="flex items-center space-x-2">
@@ -894,7 +895,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                         <td className="px-4 py-3 text-sm text-gray-900">
                           {log.field_name || 'N/A'}
                         </td>
-                        <td className="px-4 py-3 text-sm text-gray-500">
+                        <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
                           {formatAuditValue(log.old_value)}
                         </td>
                         <td className="px-4 py-3 text-sm text-gray-900">
@@ -906,7 +907,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                 </table>
 
                 {auditLogs.length === 0 && (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No audit logs found.
                   </div>
                 )}
@@ -958,7 +959,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                   onChange={(e) => setOptionForm({ ...optionForm, is_active: e.target.checked })}
                   className="h-4 w-4 text-blue-600 rounded"
                 />
-                <label htmlFor="edit_is_active" className="ml-2 text-sm text-gray-700">
+                <label htmlFor="edit_is_active" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                   Active
                 </label>
               </div>
@@ -978,6 +979,80 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
               >
                 Update
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import Preview Modal */}
+      {showImportPreview && importPreview && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+            <h3 className="text-lg font-semibold mb-4">Import Preview</h3>
+
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">File Name</label>
+                  <p className="text-sm text-gray-900">{importPreview.fileName}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">File Size</label>
+                  <p className="text-sm text-gray-900">{importPreview.fileSize}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Version</label>
+                  <p className="text-sm text-gray-900">{importPreview.version}</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Export Date</label>
+                  <p className="text-sm text-gray-900">
+                    {importPreview.exportDate ? new Date(importPreview.exportDate).toLocaleString() : 'N/A'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="border-t pt-4">
+                <h4 className="text-sm font-medium text-gray-700 mb-3">Records to Import</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {Object.entries(importPreview.counts).map(([key, count]) => (
+                    <div key={key} className="flex justify-between items-center bg-gray-50 px-3 py-2 rounded">
+                      <span className="text-sm text-gray-700 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                      <span className="text-sm font-medium text-gray-900">{count}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                <div className="flex items-start">
+                  <AlertTriangle className="w-5 h-5 text-amber-600 mr-2 flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-amber-800 font-medium">Warning</p>
+                    <p className="text-sm text-amber-700 mt-1">
+                      This will merge the imported data with your existing records. Make sure you have a backup before proceeding.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end space-x-2 mt-6">
+              <button
+                onClick={() => {
+                  setShowImportPreview(false);
+                  setImportPreview(null);
+                }}
+                className="px-4 py-2 text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmImport}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+              >
+                Confirm Import
               </button>
             </div>
           </div>

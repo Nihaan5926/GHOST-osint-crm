@@ -117,7 +117,7 @@ const BusinessList = ({ businesses, fetchBusinesses, setShowAddBusinessForm, set
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">{business.name}</h3>
                   {business.type && (
-                    <p className="text-sm text-gray-500">{business.type}</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">{business.type}</p>
                   )}
                 </div>
               </div>
@@ -143,14 +143,14 @@ const BusinessList = ({ businesses, fetchBusinesses, setShowAddBusinessForm, set
               {business.industry && (
                 <div className="flex items-center text-sm">
                   <Building2 className="w-4 h-4 mr-2 text-gray-400" />
-                  <span className="text-gray-600">{business.industry}</span>
+                  <span className="text-gray-600 dark:text-gray-400">{business.industry}</span>
                 </div>
               )}
               
               {(business.owner_first_name || business.owner_last_name) && (
                 <div className="flex items-center text-sm">
                   <User className="w-4 h-4 mr-2 text-gray-400" />
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 dark:text-gray-400">
                     Owner: {business.owner_first_name} {business.owner_last_name}
                   </span>
                 </div>
@@ -159,7 +159,7 @@ const BusinessList = ({ businesses, fetchBusinesses, setShowAddBusinessForm, set
               {business.city && (
                 <div className="flex items-center text-sm">
                   <MapPin className="w-4 h-4 mr-2 text-gray-400" />
-                  <span className="text-gray-600">
+                  <span className="text-gray-600 dark:text-gray-400">
                     {[business.city, business.state, business.country]
                       .filter(Boolean)
                       .join(', ')}
@@ -170,7 +170,7 @@ const BusinessList = ({ businesses, fetchBusinesses, setShowAddBusinessForm, set
               {business.employee_count > 0 && (
                 <div className="flex items-center text-sm">
                   <Users className="w-4 h-4 mr-2 text-gray-400" />
-                  <span className="text-gray-600">{business.employee_count} employees</span>
+                  <span className="text-gray-600 dark:text-gray-400">{business.employee_count} employees</span>
                 </div>
               )}
               
@@ -206,7 +206,7 @@ const BusinessList = ({ businesses, fetchBusinesses, setShowAddBusinessForm, set
 
       {filteredBusinesses.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">No businesses found matching your search criteria.</p>
+          <p className="text-gray-500 dark:text-gray-400">No businesses found matching your search criteria.</p>
         </div>
       )}
     </div>

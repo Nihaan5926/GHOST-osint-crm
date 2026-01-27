@@ -186,7 +186,7 @@ const CustomFieldManager = ({ customFields, fetchCustomFields }) => {
                 onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                 className="h-4 w-4 text-blue-600 rounded"
               />
-              <label htmlFor="is_active" className="ml-2 text-sm text-gray-700">
+              <label htmlFor="is_active" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
                 Active (show this field in forms)
               </label>
             </div>
@@ -215,7 +215,7 @@ const CustomFieldManager = ({ customFields, fetchCustomFields }) => {
           <div key={field.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
             <div>
               <div className="font-medium">{field.field_label}</div>
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-gray-600 dark:text-gray-400">
                 Type: {field.field_type} | Name: {field.field_name}
                 {field.options && field.options.length > 0 && (
                   <span> | Options: {field.options.join(', ')}</span>

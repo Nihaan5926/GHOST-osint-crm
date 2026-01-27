@@ -103,10 +103,10 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
           </h1>
           <div className="flex items-center space-x-4 mt-2">
             <div className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-              <BarChart3 className="w-4 h-4 mr-1 text-accent-primary" />
+              <BarChart3 className="w-4 h-4 mr-1 text-blue-600 dark:text-blue-400" />
               <span className="font-medium">{stats.total} tools</span>
             </div>
-            <div className="text-sm text-gray-500 dark:text-gray-500">
+            <div className="text-sm text-gray-500 dark:text-gray-500 dark:text-gray-400">
               {filteredAndSortedTools.length !== stats.total && (
                 <span>{filteredAndSortedTools.length} filtered</span>
               )}
@@ -115,7 +115,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
         </div>
         <button
           onClick={() => setShowAddToolForm(true)}
-          className="px-6 py-3 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all duration-300 flex items-center group"
+          className="px-6 py-3 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all duration-300 flex items-center group"
         >
           <Plus className="w-5 h-5 mr-2 group-hover:animate-pulse" />
           Add Tool
@@ -123,24 +123,24 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
       </div>
 
       {/* Search and Filters */}
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6">
         <div className="flex flex-col space-y-4">
           {/* Search Bar */}
           <div className="flex space-x-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-accent-primary w-5 h-5" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 dark:text-blue-400 w-5 h-5" />
               <input
                 type="text"
                 placeholder="Search tools by name, category, description, or tag..."
                 value={toolSearchTerm}
                 onChange={(e) => setToolSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary focus:shadow-glow-sm transition-all duration-300"
+                className="w-full pl-10 pr-4 py-3 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary focus:shadow-md transition-all duration-300"
               />
             </div>
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`px-4 py-3 glass-button rounded-glass transition-all duration-300 flex items-center ${
-                showFilters ? 'bg-gradient-primary text-white' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
+              className={`px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 transition-all duration-300 flex items-center ${
+                showFilters ? 'bg-blue-600 text-white dark:bg-blue-500' : 'text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100'
               }`}
             >
               <Filter className="w-5 h-5 mr-2" />
@@ -150,13 +150,13 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
 
           {/* Advanced Filters */}
           {showFilters && (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/20 dark:border-gray-600">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-gray-200 dark:border-gray-700 dark:border-gray-600">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
                 <select
                   value={filterCategory}
                   onChange={(e) => setFilterCategory(e.target.value)}
-                  className="w-full px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
+                  className="w-full px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
                 >
                   <option value="">All Categories</option>
                   {TOOL_CATEGORIES.map(cat => (
@@ -170,7 +170,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value)}
-                  className="w-full px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
+                  className="w-full px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
                 >
                   <option value="">All Statuses</option>
                   {TOOL_STATUSES.map(status => (
@@ -185,7 +185,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value)}
-                    className="flex-1 px-3 py-2 glass border border-white/30 rounded-glass focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
+                    className="flex-1 px-3 py-2 glass border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:border-accent-primary transition-all duration-300 dark:text-gray-100 dark:bg-slate-800"
                   >
                     <option value="name">Name</option>
                     <option value="category">Category</option>
@@ -194,7 +194,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
                   </select>
                   <button
                     onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
-                    className="px-3 py-2 glass-button rounded-glass text-gray-600 dark:text-gray-300 hover:text-accent-primary dark:hover:text-accent-primary transition-all duration-300"
+                    className="px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-600 dark:text-blue-400 transition-all duration-300"
                     title={`Sort ${sortOrder === 'asc' ? 'Descending' : 'Ascending'}`}
                   >
                     {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
@@ -209,7 +209,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
       {/* Tools Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredAndSortedTools.map(tool => (
-          <div key={tool.id} className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 hover:shadow-glass-xl transition-all duration-300 group">
+          <div key={tool.id} className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 hover:shadow-glass-xl transition-all duration-300 group">
             <div className="flex justify-between items-start mb-4">
               <h3 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-600 dark:from-gray-100 dark:to-gray-300 bg-clip-text text-transparent group-hover:from-accent-primary group-hover:to-accent-secondary transition-all duration-300">
                 {tool.name}
@@ -217,14 +217,14 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
               <div className="flex space-x-1">
                 <button
                   onClick={() => setEditingTool(tool)}
-                  className="p-2 glass-button rounded-glass text-gray-600 dark:text-gray-300 hover:bg-gradient-primary hover:text-white transition-all duration-300"
+                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-blue-700 dark:hover:bg-blue-600 hover:text-white transition-all duration-300"
                   title="Edit"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button
                   onClick={() => handleDelete(tool.id)}
-                  className="p-2 glass-button rounded-glass text-gray-600 dark:text-gray-300 hover:bg-gradient-danger hover:text-white transition-all duration-300"
+                  className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-red-600 dark:bg-red-500 hover:text-white transition-all duration-300"
                   title="Delete"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -238,7 +238,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
             
             {tool.category && (
               <div className="mb-3">
-                <span className="inline-flex items-center px-3 py-1 text-xs glass rounded-glass bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 text-accent-primary font-medium">
+                <span className="inline-flex items-center px-3 py-1 text-xs glass rounded-lg bg-gradient-to-r from-accent-primary/20 to-accent-secondary/20 text-blue-600 dark:text-blue-400 font-medium">
                   <Tag className="w-3 h-3 mr-1" />
                   {tool.category}
                 </span>
@@ -248,7 +248,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
             {tool.tags && tool.tags.length > 0 && (
               <div className="mb-3 flex flex-wrap gap-1">
                 {tool.tags.map((tag, index) => (
-                  <span key={index} className="inline-block px-2 py-1 text-xs glass rounded-glass bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-700 dark:text-blue-400 font-medium">
+                  <span key={index} className="inline-block px-2 py-1 text-xs glass rounded-lg bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-700 dark:text-blue-400 font-medium">
                     {tag}
                   </span>
                 ))}
@@ -260,7 +260,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
                 href={tool.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-3 py-2 glass-button rounded-glass text-accent-primary hover:bg-gradient-primary hover:text-white transition-all duration-300 text-sm font-medium mb-3"
+                className="inline-flex items-center px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-blue-600 dark:text-blue-400 hover:bg-blue-700 dark:hover:bg-blue-600 hover:text-white transition-all duration-300 text-sm font-medium mb-3"
               >
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Visit Tool
@@ -269,7 +269,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
             
             {tool.status && (
               <div className="mt-3">
-                <span className={`inline-block px-3 py-1 text-xs rounded-glass font-medium ${getStatusColor(tool.status)}`}>
+                <span className={`inline-block px-3 py-1 text-xs rounded-lg font-medium ${getStatusColor(tool.status)}`}>
                   {tool.status}
                 </span>
               </div>
@@ -280,7 +280,7 @@ const ToolsList = ({ tools, fetchTools, setShowAddToolForm, setEditingTool }) =>
 
       {filteredAndSortedTools.length === 0 && (
         <div className="text-center py-12">
-          <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-8 max-w-md mx-auto">
+          <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-8 max-w-md mx-auto">
             <div className="text-gray-400 dark:text-gray-500 mb-4">
               <Search className="w-12 h-12 mx-auto opacity-50" />
             </div>

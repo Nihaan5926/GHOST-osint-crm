@@ -205,38 +205,71 @@ Used cache: ${result.summary.cached}`);
   
   // Add new location with enhanced geocoding
   const addLocationWithGeocoding = async () => {
-    if (!newLocationData.address.trim()) return;
-    
+    if (!newLocationData.address.trim() || !newLocationData.personId) {
+      alert('Please enter an address and select a person');
+      return;
+    }
+
     try {
       const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
-      const response = await fetch(`${API_BASE_URL}/geocode/address`, {
+
+      // First geocode the address
+      const geocodeResponse = await fetch(`${API_BASE_URL}/geocode/address`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({
           address: newLocationData.address,
           minConfidence: 30
         })
       });
-      
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          alert(`Location geocoded successfully!
+
+      if (geocodeResponse.ok) {
+        const geocodeResult = await geocodeResponse.json();
+        if (geocodeResult.success) {
+          // Now add the location to the person
+          const locationData = {
+            address: newLocationData.address,
+            city: geocodeResult.result.city || '',
+            state: geocodeResult.result.state || '',
+            country: geocodeResult.result.country || '',
+            postal_code: geocodeResult.result.postal_code || '',
+            latitude: geocodeResult.result.lat,
+            longitude: geocodeResult.result.lng,
+            type: 'other',
+            current: true,
+            date_added: new Date().toISOString().split('T')[0]
+          };
+
+          const addResponse = await fetch(`${API_BASE_URL}/people/${newLocationData.personId}/travel-history`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify(locationData)
+          });
+
+          if (addResponse.ok) {
+            alert(`Location added successfully!
 Address: ${newLocationData.address}
-Coordinates: ${result.result.lat}, ${result.result.lng}
-Confidence: ${result.result.confidence}%`);
-          setNewLocationData({ address: '', personId: null });
-          setShowAddLocation(false);
-          fetchPeople();
+Coordinates: ${geocodeResult.result.lat}, ${geocodeResult.result.lng}
+Confidence: ${geocodeResult.result.confidence}%`);
+            setNewLocationData({ address: '', personId: null });
+            setShowAddLocation(false);
+            fetchPeople();
+          } else {
+            alert('Location geocoded but failed to save. Please try adding it manually from the person\'s profile.');
+          }
         } else {
           alert('Could not geocode the address. Please try a more specific address.');
         }
       }
     } catch (error) {
-      console.error('Error geocoding new location:', error);
-      alert('Failed to geocode location');
+      console.error('Error adding location:', error);
+      alert('Failed to add location');
     }
   };
   
@@ -604,7 +637,7 @@ Confidence: ${result.result.confidence}%`);
               <div className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300">
                 <Users className="w-4 h-4 text-blue-600" />
                 <span className="font-medium">{filteredPeople.length} people</span>
-                <span className="text-gray-400 dark:text-gray-500">|</span>
+                <span className="text-gray-400 dark:text-gray-500 dark:text-gray-400">|</span>
                 <MapPin className="w-4 h-4 text-blue-600" />
                 <span className="font-medium">{markers.length} locations</span>
               </div>
@@ -613,12 +646,12 @@ Confidence: ${result.result.confidence}%`);
                 <div className="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
                   <CheckCircle className="w-3 h-3 text-green-500" />
                   <span>{geocodingStats.total_cached} cached</span>
-                  <span className="text-gray-400 dark:text-gray-500">|</span>
+                  <span className="text-gray-400 dark:text-gray-500 dark:text-gray-400">|</span>
                   <Clock className="w-3 h-3 text-blue-500" />
                   <span>{geocodingStats.cached_today} today</span>
                   {geocodingStats.avg_confidence && (
                     <>
-                      <span className="text-gray-400 dark:text-gray-500">|</span>
+                      <span className="text-gray-400 dark:text-gray-500 dark:text-gray-400">|</span>
                       <span>Avg: {Math.round(geocodingStats.avg_confidence)}%</span>
                     </>
                   )}
@@ -659,13 +692,31 @@ Confidence: ${result.result.confidence}%`);
       
       {/* Add Location Modal */}
       {showAddLocation && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
           <div className="bg-white dark:bg-slate-800 border border-gray-300 dark:border-gray-600 shadow-lg rounded-lg p-6 w-96 max-w-90vw">
             <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-gray-100">
               Add New Location
             </h3>
             
             <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Select Person
+                </label>
+                <select
+                  value={newLocationData.personId || ''}
+                  onChange={(e) => setNewLocationData(prev => ({ ...prev, personId: parseInt(e.target.value) || null }))}
+                  className="w-full px-3 py-2 bg-white dark:bg-slate-800 dark:text-gray-100 border border-gray-300 dark:border-gray-600 rounded focus:outline-none focus:border-blue-500"
+                >
+                  <option value="">-- Select a person --</option>
+                  {people.map(person => (
+                    <option key={person.id} value={person.id}>
+                      {person.first_name} {person.last_name} {person.case_name ? `(${person.case_name})` : ''}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Address
@@ -717,10 +768,10 @@ Confidence: ${result.result.confidence}%`);
                 </button>
                 <button
                   onClick={addLocationWithGeocoding}
-                  disabled={!newLocationData.address.trim()}
+                  disabled={!newLocationData.address.trim() || !newLocationData.personId}
                   className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Test Geocoding
+                  Add Location
                 </button>
               </div>
             </div>

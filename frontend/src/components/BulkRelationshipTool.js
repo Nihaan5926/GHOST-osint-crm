@@ -250,8 +250,8 @@ const BulkRelationshipTool = ({ onClose, people, onComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="glass-card backdrop-blur-xl border border-white/30 shadow-glass-lg rounded-glass-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-auto">
+    <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 backdrop-blur-xl border border-gray-300 dark:border-gray-600 shadow-glass-lg rounded-lg-lg p-6 max-w-4xl w-full max-h-[90vh] overflow-auto">
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
@@ -260,7 +260,7 @@ const BulkRelationshipTool = ({ onClose, people, onComplete }) => {
             </div>
             <div>
               <h2 className="text-2xl font-bold text-gray-900">Bulk Create Relationships</h2>
-              <p className="text-sm text-gray-600">Add multiple connections between people at once</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400">Add multiple connections between people at once</p>
             </div>
           </div>
           <button
@@ -391,7 +391,7 @@ const BulkRelationshipTool = ({ onClose, people, onComplete }) => {
         {/* CSV Mode */}
         {mode === 'csv' && (
           <div className="space-y-4">
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm font-mono text-gray-700">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 text-sm font-mono text-gray-700 dark:text-gray-300">
               <div className="font-semibold mb-1">Format:</div>
               <div>From, To, Type, Note</div>
               <div className="text-xs text-gray-500 mt-2">Example:</div>
@@ -405,7 +405,7 @@ const BulkRelationshipTool = ({ onClose, people, onComplete }) => {
               placeholder="Paste CSV data here...&#10;From, To, Type, Note&#10;John Doe, Jane Smith, family, Siblings&#10;Alice Johnson, Bob Williams, associate, Business partners"
             />
 
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
               <AlertCircle className="w-4 h-4" />
               <span>{csvData.split('\n').filter(l => l.trim()).length - 1} relationships to create</span>
             </div>
@@ -422,7 +422,7 @@ const BulkRelationshipTool = ({ onClose, people, onComplete }) => {
           </button>
           <button
             onClick={mode === 'interactive' ? submitInteractiveRelationships : submitCSVRelationships}
-            className="px-6 py-2 bg-gradient-primary text-white rounded-glass hover:shadow-glow-md transition-all flex items-center space-x-2"
+            className="px-6 py-2 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all flex items-center space-x-2"
           >
             <Check className="w-4 h-4" />
             <span>Create Relationships</span>
