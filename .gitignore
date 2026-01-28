@@ -263,6 +263,8 @@ cursor/
 .cursor/
 .aider*
 .anthropic/
+.claude/
+*.clauderc
 
 # User Data and Uploads (IMPORTANT: Never commit sensitive data)
 backend/public/uploads/**/*
