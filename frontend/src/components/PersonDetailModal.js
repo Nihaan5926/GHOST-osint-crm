@@ -109,7 +109,7 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                   )}
                 </h2>
                 {person.aliases && person.aliases.length > 0 && (
-                  <p className="text-sm text-gray-600 font-medium">AKA: {person.aliases.join(', ')}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">AKA: {person.aliases.join(', ')}</p>
                 )}
               </div>
             </div>
@@ -168,30 +168,30 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                   {/* Basic Information */}
                   <div className="space-y-4">
                     <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center">
+                      <h3 className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-gray-100">
                         <User className="w-5 h-5 mr-2 text-gray-400" />
                         Basic Information
                       </h3>
                       <div className="space-y-3 glass rounded-lg-lg p-4">
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600 dark:text-gray-400">First Name:</span>
-                          <span className="font-semibold text-gray-900">{person.first_name || 'N/A'}</span>
+                          <span className="font-semibold text-gray-900 dark:text-gray-100">{person.first_name || 'N/A'}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="font-medium text-gray-600 dark:text-gray-400">Last Name:</span>
-                          <span className="font-semibold text-gray-900">{person.last_name || 'N/A'}</span>
+                          <span className="font-semibold text-gray-900 dark:text-gray-100">{person.last_name || 'N/A'}</span>
                         </div>
                         {person.date_of_birth && (
                           <div className="flex justify-between">
                             <span className="font-medium text-gray-600 dark:text-gray-400">Date of Birth:</span>
-                            <span className="font-semibold text-gray-900">{new Date(person.date_of_birth).toLocaleDateString()}</span>
+                            <span className="font-semibold text-gray-900 dark:text-gray-100">{new Date(person.date_of_birth).toLocaleDateString()}</span>
                           </div>
                         )}
                       </div>
                     </div>
 
                     <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center">
+                      <h3 className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-gray-100">
                         <Tag className="w-5 h-5 mr-2 text-gray-400" />
                         Classification
                       </h3>
@@ -216,7 +216,7 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                         {person.crm_status && (
                           <div className="flex justify-between">
                             <span className="font-medium text-gray-600 dark:text-gray-400">CRM Status:</span>
-                            <span className="font-semibold text-gray-900">{person.crm_status}</span>
+                            <span className="font-semibold text-gray-900 dark:text-gray-100">{person.crm_status}</span>
                           </div>
                         )}
                       </div>
@@ -227,7 +227,7 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                   <div className="space-y-4">
                     {person.case_name && (
                       <div>
-                        <h3 className="text-lg font-semibold mb-3 flex items-center">
+                        <h3 className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-gray-100">
                           <Briefcase className="w-5 h-5 mr-2 text-gray-400" />
                           Case Information
                         </h3>
@@ -241,20 +241,20 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                     )}
 
                     <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center">
+                      <h3 className="text-lg font-semibold mb-3 flex items-center text-gray-900 dark:text-gray-100">
                         <Network className="w-5 h-5 mr-2 text-gray-400" />
                         Connection Summary
                       </h3>
                       <div className="glass rounded-lg-lg p-4">
                         <div className="text-center">
                           <div className="text-3xl font-bold bg-gradient-to-r from-accent-primary to-accent-secondary bg-clip-text text-transparent">{connectedPeople.length}</div>
-                          <div className="text-sm text-gray-600 font-medium">Total Connections</div>
+                          <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">Total Connections</div>
                         </div>
                         {connectedPeople.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
                             <div className="grid grid-cols-2 gap-2 text-sm">
-                              <div className="font-medium">Outgoing: <span className="text-blue-600 dark:text-blue-400">{connectedPeople.filter(c => c.direction === 'outgoing').length}</span></div>
-                              <div className="font-medium">Incoming: <span className="text-accent-secondary">{connectedPeople.filter(c => c.direction === 'incoming').length}</span></div>
+                              <div className="font-medium text-gray-900 dark:text-gray-100">Outgoing: <span className="text-blue-600 dark:text-blue-400">{connectedPeople.filter(c => c.direction === 'outgoing').length}</span></div>
+                              <div className="font-medium text-gray-900 dark:text-gray-100">Incoming: <span className="text-accent-secondary">{connectedPeople.filter(c => c.direction === 'incoming').length}</span></div>
                             </div>
                           </div>
                         )}
@@ -266,9 +266,9 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                 {/* Notes */}
                 {person.notes && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900">Notes</h3>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Notes</h3>
                     <div className="glass rounded-lg-lg p-4">
-                      <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">{person.notes}</p>
+                      <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">{person.notes}</p>
                     </div>
                   </div>
                 )}
@@ -276,16 +276,16 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                 {/* OSINT Data */}
                 {person.osint_data && person.osint_data.length > 0 && (
                   <div className="mb-6">
-                    <h3 className="text-lg font-semibold mb-3">OSINT Data</h3>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">OSINT Data</h3>
                     <div className="space-y-2">
                       {person.osint_data.map((osint, index) => (
                         <div key={index} className="flex items-center space-x-3 p-3 glass rounded-lg hover:bg-gray-100 dark:bg-gray-700 transition-all duration-300">
                           <div className="text-gray-600 dark:text-gray-400">
                             {getOsintIcon(osint.type)}
                           </div>
-                          <div className="flex-1">
+                          <div className="flex-1 text-gray-900 dark:text-gray-100">
                             <span className="font-medium">{osint.type}:</span> {osint.value}
-                            {osint.notes && <p className="text-sm text-gray-600 mt-1">{osint.notes}</p>}
+                            {osint.notes && <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{osint.notes}</p>}
                           </div>
                         </div>
                       ))}
@@ -296,12 +296,12 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                 {/* Custom Fields */}
                 {person.custom_fields && Object.keys(person.custom_fields).length > 0 && (
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Custom Fields</h3>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Custom Fields</h3>
                     <div className="space-y-2">
                       {Object.entries(person.custom_fields).map(([key, value]) => {
                         const fieldDef = customFields.find(f => f.field_name === key);
                         return (
-                          <div key={key} className="flex items-center space-x-3 p-3 glass rounded-lg">
+                          <div key={key} className="flex items-center space-x-3 p-3 glass rounded-lg text-gray-900 dark:text-gray-100">
                             <span className="font-medium">{fieldDef?.field_label || key}:</span>
                             <span>{value}</span>
                           </div>
@@ -327,7 +327,7 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
               <div className="p-6">
                 {person.locations && person.locations.length > 0 ? (
                   <div>
-                    <h3 className="text-lg font-semibold mb-3">Locations</h3>
+                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-gray-100">Locations</h3>
                     <div className="space-y-3">
                       {person.locations.map((location, index) => (
                         <div key={index} className="p-4 glass rounded-lg-lg">
@@ -339,13 +339,13 @@ const PersonDetailModal = ({ person, people, customFields, onClose, onEdit }) =>
                                   {location.type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                 </span>
                               </div>
-                              <p className="font-medium">{location.address}</p>
+                              <p className="font-medium text-gray-900 dark:text-gray-100">{location.address}</p>
                               <p className="text-sm text-gray-600 dark:text-gray-400">
                                 {[location.city, location.state, location.country, location.postal_code]
                                   .filter(Boolean)
                                   .join(', ')}
                               </p>
-                              {location.notes && <p className="text-sm text-gray-500 mt-2">{location.notes}</p>}
+                              {location.notes && <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">{location.notes}</p>}
                             </div>
                           </div>
                         </div>
