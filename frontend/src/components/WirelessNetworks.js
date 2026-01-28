@@ -3,12 +3,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import {
   Wifi, Upload, Download, Map as MapIcon, List, Search, Filter,
   Trash2, User, Shield, ShieldAlert, ShieldCheck, Signal,
-  Radio, Bluetooth, RefreshCw, BarChart3, Lock, Unlock
+  Radio, Bluetooth, RefreshCw, BarChart3, Lock, Unlock, Plus
 } from 'lucide-react';
 import { wirelessNetworksAPI, peopleAPI } from '../utils/api';
 import WirelessNetworkMap from './WirelessNetworkMap';
 import WirelessNetworkDetail from './WirelessNetworkDetail';
 import ImportKML from './ImportKML';
+import AddNetworkForm from './AddNetworkForm';
 
 const WirelessNetworks = () => {
   const [networks, setNetworks] = useState([]);
@@ -19,6 +20,7 @@ const WirelessNetworks = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedNetwork, setSelectedNetwork] = useState(null);
   const [showImportModal, setShowImportModal] = useState(false);
+  const [showAddNetworkModal, setShowAddNetworkModal] = useState(false);
   const [selectedNetworks, setSelectedNetworks] = useState([]);
   const [filters, setFilters] = useState({
     network_type: '',
@@ -182,6 +184,13 @@ const WirelessNetworks = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <button
+            onClick={() => setShowAddNetworkModal(true)}
+            className="px-4 py-2 bg-green-600 text-white dark:bg-green-500 rounded-lg hover:shadow-glow-md transition-all duration-300 flex items-center"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Network
+          </button>
           <button
             onClick={() => setShowImportModal(true)}
             className="px-4 py-2 bg-blue-600 text-white dark:bg-blue-500 rounded-lg hover:shadow-glow-md transition-all duration-300 flex items-center"
@@ -485,6 +494,16 @@ const WirelessNetworks = () => {
       )}
 
       {/* Modals */}
+      {showAddNetworkModal && (
+        <AddNetworkForm
+          onClose={() => setShowAddNetworkModal(false)}
+          onSuccess={() => {
+            fetchNetworks();
+            fetchStats();
+          }}
+        />
+      )}
+
       {showImportModal && (
         <ImportKML
           onClose={() => setShowImportModal(false)}

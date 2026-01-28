@@ -2391,11 +2391,16 @@ app.post('/api/wireless-networks', requireAuth, async (req, res) => {
       ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
       frequency, channel, network_type, confidence_level, first_seen, last_seen,
       scan_date, person_id, association_note, association_confidence,
-      import_source, notes, tags, area_name
+      import_source, notes, tags, area_name, password, associated_person_ids, associated_business_ids
     } = req.body;
 
-    if (!ssid || !bssid || !latitude || !longitude) {
-      return res.status(400).json({ error: 'SSID, BSSID, latitude, and longitude are required' });
+    if (!ssid) {
+      return res.status(400).json({ error: 'SSID is required' });
+    }
+
+    // If location is provided, both lat and long must be present
+    if ((latitude && !longitude) || (!latitude && longitude)) {
+      return res.status(400).json({ error: 'Both latitude and longitude must be provided if specifying location' });
     }
 
     const result = await pool.query(
@@ -2403,13 +2408,13 @@ app.post('/api/wireless-networks', requireAuth, async (req, res) => {
         ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
         frequency, channel, network_type, confidence_level, first_seen, last_seen,
         scan_date, person_id, association_note, association_confidence,
-        import_source, notes, tags, area_name
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21)
+        import_source, notes, tags, area_name, password, associated_person_ids, associated_business_ids
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)
       RETURNING *`,
       [ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
        frequency, channel, network_type || 'WIFI', confidence_level, first_seen, last_seen,
        scan_date, person_id, association_note, association_confidence,
-       import_source, notes, tags, area_name]
+       import_source, notes, tags, area_name, password, associated_person_ids, associated_business_ids]
     );
 
     res.status(201).json(result.rows[0]);
@@ -2426,7 +2431,7 @@ app.put('/api/wireless-networks/:id', requireAuth, async (req, res) => {
       ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
       frequency, channel, network_type, confidence_level, first_seen, last_seen,
       scan_date, person_id, association_note, association_confidence,
-      notes, tags, area_name
+      notes, tags, area_name, password, associated_person_ids, associated_business_ids
     } = req.body;
 
     const result = await pool.query(
@@ -2435,12 +2440,13 @@ app.put('/api/wireless-networks/:id', requireAuth, async (req, res) => {
         encryption = $6, signal_strength = $7, frequency = $8, channel = $9,
         network_type = $10, confidence_level = $11, first_seen = $12, last_seen = $13,
         scan_date = $14, person_id = $15, association_note = $16,
-        association_confidence = $17, notes = $18, tags = $19, area_name = $20
-      WHERE id = $21 RETURNING *`,
+        association_confidence = $17, notes = $18, tags = $19, area_name = $20,
+        password = $21, associated_person_ids = $22, associated_business_ids = $23
+      WHERE id = $24 RETURNING *`,
       [ssid, bssid, latitude, longitude, accuracy, encryption, signal_strength,
        frequency, channel, network_type, confidence_level, first_seen, last_seen,
        scan_date, person_id, association_note, association_confidence,
-       notes, tags, area_name, req.params.id]
+       notes, tags, area_name, password, associated_person_ids, associated_business_ids, req.params.id]
     );
 
     if (result.rows.length === 0) {

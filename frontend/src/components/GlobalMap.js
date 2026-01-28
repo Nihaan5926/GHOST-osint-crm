@@ -4,8 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Search, MapPin, Users, Filter, RefreshCw, Plus, AlertCircle, CheckCircle, Clock } from 'lucide-react';
-import { peopleAPI } from '../utils/api';
+import { Search, MapPin, Users, Filter, RefreshCw, Plus, AlertCircle, CheckCircle, Clock, Wifi } from 'lucide-react';
+import { peopleAPI, wirelessNetworksAPI } from '../utils/api';
 
 // Custom hook to handle map bounds with better performance (only run once on mount)
 const MapBounds = ({ markers }) => {
@@ -41,6 +41,8 @@ const locationColors = {
 const GlobalMap = () => {
   const [people, setPeople] = useState([]);
   const [filteredPeople, setFilteredPeople] = useState([]);
+  const [wirelessNetworks, setWirelessNetworks] = useState([]);
+  const [showNetworks, setShowNetworks] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [includeRelated, setIncludeRelated] = useState(false);
   const [selectedLocationTypes, setSelectedLocationTypes] = useState(Object.keys(locationColors));
@@ -54,9 +56,10 @@ const GlobalMap = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  // Fetch people data and geocoding stats
+  // Fetch people data, wireless networks, and geocoding stats
   useEffect(() => {
     fetchPeople();
+    fetchWirelessNetworks();
     fetchGeocodingStats();
   }, []);
 
@@ -105,6 +108,17 @@ const GlobalMap = () => {
       }
     } catch (error) {
       console.error('Error fetching geocoding stats:', error);
+    }
+  };
+
+  const fetchWirelessNetworks = async () => {
+    try {
+      const networks = await wirelessNetworksAPI.getAll();
+      // Filter networks that have location data
+      const networksWithLocation = networks.filter(n => n.latitude && n.longitude);
+      setWirelessNetworks(networksWithLocation);
+    } catch (error) {
+      console.error('Error fetching wireless networks:', error);
     }
   };
 
@@ -360,6 +374,32 @@ Confidence: ${geocodeResult.result.confidence}%`);
         iconAnchor: [10, 10]
       });
     });
+
+    // Wireless network icon
+    cache['wifi'] = L.divIcon({
+      className: 'custom-div-icon',
+      html: `<div style="
+        background-color: #3b82f6;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M5 13a10 10 0 0 1 14 0"></path>
+          <path d="M8.5 16.5a5 5 0 0 1 7 0"></path>
+          <path d="M2 8.82a15 15 0 0 1 20 0"></path>
+          <line x1="12" y1="20" x2="12.01" y2="20"></line>
+        </svg>
+      </div>`,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
     return cache;
   }, []); // Only create once
 
@@ -405,8 +445,31 @@ Confidence: ${geocodeResult.result.confidence}%`);
       }
     });
 
+    // Add wireless network markers
+    if (showNetworks) {
+      wirelessNetworks.forEach((network) => {
+        markerList.push({
+          id: `network-${network.id}`,
+          lat: parseFloat(network.latitude),
+          lng: parseFloat(network.longitude),
+          type: 'wireless_network',
+          ssid: network.ssid,
+          bssid: network.bssid,
+          encryption: network.encryption,
+          networkType: network.network_type,
+          signalStrength: network.signal_strength,
+          areaName: network.area_name,
+          password: network.password,
+          notes: network.notes,
+          associatedPersonIds: network.associated_person_ids || [],
+          associatedBusinessIds: network.associated_business_ids || [],
+          icon: iconCache['wifi']
+        });
+      });
+    }
+
     return markerList;
-  }, [filteredPeople, selectedLocationTypes, iconCache]);
+  }, [filteredPeople, selectedLocationTypes, iconCache, wirelessNetworks, showNetworks]);
 
   const toggleLocationType = (type) => {
     setSelectedLocationTypes(prev => {
@@ -489,9 +552,23 @@ Confidence: ${geocodeResult.result.confidence}%`);
               />
               <span className="text-sm text-gray-700 dark:text-gray-300">Include related people</span>
             </label>
+
+            {/* Show Wireless Networks */}
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={showNetworks}
+                onChange={(e) => setShowNetworks(e.target.checked)}
+                className="h-4 w-4 text-blue-600 rounded"
+              />
+              <span className="text-sm text-gray-700 dark:text-gray-300 flex items-center">
+                <Wifi className="w-4 h-4 mr-1" />
+                Wireless Networks ({wirelessNetworks.length})
+              </span>
+            </label>
           </div>
         </div>
-        
+
         {/* Location Type Filters */}
         <div className="mt-4 flex items-center space-x-4">
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter by type:</span>
@@ -514,6 +591,19 @@ Confidence: ${geocodeResult.result.confidence}%`);
                 {type.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </button>
             ))}
+            {showNetworks && wirelessNetworks.length > 0 && (
+              <button
+                className="px-3 py-1 rounded-full text-xs font-medium ring-2 ring-offset-2"
+                style={{
+                  backgroundColor: '#3b82f6',
+                  color: 'white',
+                  ringColor: '#3b82f6'
+                }}
+              >
+                <Wifi className="w-3 h-3 inline mr-1" />
+                Wireless Networks
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -546,53 +636,89 @@ Confidence: ${geocodeResult.result.confidence}%`);
                 icon={marker.icon}
               >
                 <Popup>
-                  <div className="p-2 min-w-[200px]">
-                    <h3 className="font-semibold text-gray-900 dark:text-gray-100">{marker.personName}</h3>
-                    {marker.personCategory && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400">{marker.personCategory}</p>
-                    )}
-                    {marker.personCaseName && (
-                      <p className="text-xs text-blue-600 dark:text-blue-400">Case: {marker.personCaseName}</p>
-                    )}
+                  {marker.type === 'wireless_network' ? (
+                    <div className="p-2 min-w-[200px]">
+                      <h3 className="font-semibold text-blue-600 dark:text-blue-400 flex items-center">
+                        <Wifi className="w-4 h-4 mr-2" />
+                        {marker.ssid}
+                      </h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 font-mono">{marker.bssid}</p>
 
-                    <div className="mt-2 border-t dark:border-gray-600 pt-2">
-                      <div className="flex items-center justify-between mb-1">
-                        <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
-                          {marker.locationType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                        </p>
-                        {/* Location accuracy indicator */}
-                        {marker.locationConfidence > 0 && (
-                          <span className={`text-xs px-2 py-0.5 rounded ${
-                            marker.locationConfidence >= 70 ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' :
-                            marker.locationConfidence >= 50 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
-                            'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300'
-                          }`}>
-                            {marker.locationConfidence >= 70 ? 'High' :
-                             marker.locationConfidence >= 50 ? 'Medium' :
-                             'Low'} {marker.locationConfidence}%
-                          </span>
+                      <div className="mt-2 border-t dark:border-gray-600 pt-2 space-y-1">
+                        {marker.encryption && (
+                          <p className="text-sm"><span className="font-medium">Security:</span> {marker.encryption}</p>
+                        )}
+                        {marker.networkType && (
+                          <p className="text-sm"><span className="font-medium">Type:</span> {marker.networkType}</p>
+                        )}
+                        {marker.signalStrength && (
+                          <p className="text-sm"><span className="font-medium">Signal:</span> {marker.signalStrength} dBm</p>
+                        )}
+                        {marker.password && (
+                          <p className="text-sm"><span className="font-medium">Password:</span> {marker.password}</p>
+                        )}
+                        {marker.areaName && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{marker.areaName}</p>
+                        )}
+                        {marker.notes && (
+                          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{marker.notes}</p>
+                        )}
+                        {marker.associatedPersonIds.length > 0 && (
+                          <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                            {marker.associatedPersonIds.length} associated person(s)
+                          </p>
                         )}
                       </div>
-
-                      {marker.locationAddress && (
-                        <p className="text-sm text-gray-800 dark:text-gray-200">{marker.locationAddress}</p>
-                      )}
-
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {[marker.locationCity, marker.locationCountry]
-                          .filter(Boolean)
-                          .join(', ')}
-                      </p>
-
-                      {/* Show confidence warning for partial data */}
-                      {marker.isPartialData && (
-                        <p className="text-xs text-orange-600 dark:text-orange-400 mt-1 flex items-center">
-                          <AlertCircle className="w-3 h-3 mr-1" />
-                          Approximate location
-                        </p>
-                      )}
                     </div>
-                  </div>
+                  ) : (
+                    <div className="p-2 min-w-[200px]">
+                      <h3 className="font-semibold text-gray-900 dark:text-gray-100">{marker.personName}</h3>
+                      {marker.personCategory && (
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{marker.personCategory}</p>
+                      )}
+                      {marker.personCaseName && (
+                        <p className="text-xs text-blue-600 dark:text-blue-400">Case: {marker.personCaseName}</p>
+                      )}
+
+                      <div className="mt-2 border-t dark:border-gray-600 pt-2">
+                        <div className="flex items-center justify-between mb-1">
+                          <p className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                            {marker.locationType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </p>
+                          {/* Location accuracy indicator */}
+                          {marker.locationConfidence > 0 && (
+                            <span className={`text-xs px-2 py-0.5 rounded ${
+                              marker.locationConfidence >= 70 ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' :
+                              marker.locationConfidence >= 50 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300' :
+                              'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300'
+                            }`}>
+                              {marker.locationConfidence >= 70 ? 'High' :
+                               marker.locationConfidence >= 50 ? 'Medium' :
+                               'Low'} {marker.locationConfidence}%
+                            </span>
+                          )}
+                        </div>
+
+                        {marker.locationAddress && (
+                          <p className="text-sm text-gray-800 dark:text-gray-200">{marker.locationAddress}</p>
+                        )}
+
+                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                          {[marker.locationCity, marker.locationCountry]
+                            .filter(Boolean)
+                            .join(', ')}
+                        </p>
+
+                        {/* Show confidence warning for partial data */}
+                        {marker.isPartialData && (
+                          <p className="text-xs text-orange-600 dark:text-orange-400 mt-1 flex items-center">
+                            <AlertCircle className="w-3 h-3 mr-1" />
+                            Approximate location
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </Popup>
               </Marker>
             ))}
