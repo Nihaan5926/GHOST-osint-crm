@@ -305,6 +305,61 @@ const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_travel_history_location ON travel_history(country, city);
     `);
 
+    // Create wireless_networks table for WiGLE wardriving data
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS wireless_networks (
+        id SERIAL PRIMARY KEY,
+        ssid VARCHAR(255) NOT NULL,
+        bssid VARCHAR(17) NOT NULL,
+        latitude DOUBLE PRECISION NOT NULL,
+        longitude DOUBLE PRECISION NOT NULL,
+        accuracy DOUBLE PRECISION,
+        encryption VARCHAR(50),
+        signal_strength INTEGER,
+        frequency VARCHAR(20),
+        channel INTEGER,
+        network_type VARCHAR(20) DEFAULT 'WIFI',
+        confidence_level VARCHAR(20),
+        first_seen TIMESTAMP,
+        last_seen TIMESTAMP,
+        scan_date TIMESTAMP,
+        person_id INTEGER REFERENCES people(id) ON DELETE SET NULL,
+        association_note TEXT,
+        association_confidence VARCHAR(20),
+        import_source VARCHAR(255),
+        import_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        notes TEXT,
+        tags TEXT[],
+        area_name VARCHAR(255),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT unique_network_location UNIQUE(bssid, latitude, longitude, scan_date)
+      );
+    `);
+    console.log('Checked/created "wireless_networks" table.');
+    await applyUpdatedAtTrigger(client, 'wireless_networks');
+
+    // Create wireless_networks indexes
+    await client.query(`
+      CREATE INDEX IF NOT EXISTS idx_wireless_ssid ON wireless_networks(ssid);
+      CREATE INDEX IF NOT EXISTS idx_wireless_bssid ON wireless_networks(bssid);
+      CREATE INDEX IF NOT EXISTS idx_wireless_location ON wireless_networks(latitude, longitude);
+      CREATE INDEX IF NOT EXISTS idx_wireless_person ON wireless_networks(person_id);
+      CREATE INDEX IF NOT EXISTS idx_wireless_scan_date ON wireless_networks(scan_date);
+      CREATE INDEX IF NOT EXISTS idx_wireless_network_type ON wireless_networks(network_type);
+      CREATE INDEX IF NOT EXISTS idx_wireless_encryption ON wireless_networks(encryption);
+    `);
+    console.log('Created indexes for "wireless_networks" table.');
+
+    // Add password and association columns if they don't exist (migration)
+    await client.query(`
+      ALTER TABLE wireless_networks
+      ADD COLUMN IF NOT EXISTS password VARCHAR(255),
+      ADD COLUMN IF NOT EXISTS associated_person_ids INTEGER[],
+      ADD COLUMN IF NOT EXISTS associated_business_ids INTEGER[];
+    `);
+    console.log('Added additional columns to "wireless_networks" table.');
+
   } catch (err) {
     console.error('Error during database initialization:', err.stack);
     process.exit(1);
