@@ -3,6 +3,9 @@
 # Stage 1: Build the React application
 FROM node:18-alpine AS build
 
+# Install build dependencies that may be needed for native modules
+RUN apk add --no-cache python3 make g++
+
 # Set the working directory
 WORKDIR /app
 
@@ -13,8 +16,9 @@ COPY package*.json ./
 COPY tailwind.config.js ./
 COPY postcss.config.js ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies using npm ci for reproducible builds
+# Fall back to npm install if package-lock.json is missing
+RUN if [ -f package-lock.json ]; then npm ci --prefer-offline --no-audit; else npm install --prefer-offline --no-audit; fi
 
 # Copy the rest of the application code
 COPY . .
