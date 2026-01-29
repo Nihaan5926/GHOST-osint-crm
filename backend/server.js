@@ -2531,12 +2531,12 @@ app.post('/api/wireless-networks/import-kml', requireAuth, multer({ storage: mul
         let bssid = '', encryption = 'Unknown', signal = null, accuracy = null, timestamp = null, networkType = 'WIFI';
 
         descLines.forEach(line => {
-          if (line.includes('Network ID:')) bssid = line.split(':')[1].trim();
-          if (line.includes('Encryption:')) encryption = line.split(':')[1].trim();
-          if (line.includes('Signal:')) signal = parseFloat(line.split(':')[1].trim());
-          if (line.includes('Accuracy:')) accuracy = parseFloat(line.split(':')[1].trim());
+          if (line.includes('Network ID:')) bssid = line.split('Network ID:')[1].trim();
+          if (line.includes('Encryption:')) encryption = line.split('Encryption:')[1].trim();
+          if (line.includes('Signal:')) signal = parseFloat(line.split('Signal:')[1].trim());
+          if (line.includes('Accuracy:')) accuracy = parseFloat(line.split('Accuracy:')[1].trim());
           if (line.includes('Time:')) timestamp = line.split('Time:')[1].trim();
-          if (line.includes('Type:')) networkType = line.split(':')[1].trim();
+          if (line.includes('Type:')) networkType = line.split('Type:')[1].trim();
         });
 
         // Map confidence from style
