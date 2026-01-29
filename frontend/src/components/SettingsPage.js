@@ -2,10 +2,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Save, Upload, Download, Shield, Plus, Edit2, Trash2, X, Clock, User, ChevronDown, ChevronRight, CheckCircle, AlertTriangle, FileText, Database, Settings, Users, Building2, MapPin, Eye, Folder, Lock } from 'lucide-react';
 import CustomFieldManager from './CustomFieldManager';
+import UserManagement from './UserManagement';
+import AuditLogs from './AuditLogs';
 import { uploadLogo, modelOptionsAPI, auditAPI, exportAPI, importAPI } from '../utils/api';
 import { authAPI } from '../utils/authAPI';
 
-const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppNameChange, setAppSettings }) => {
+const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppNameChange, setAppSettings, currentUser }) => {
   const [activeTab, setActiveTab] = useState('general');
   const [tempAppName, setTempAppName] = useState(appSettings.appName);
   const [modelOptions, setModelOptions] = useState([]);
@@ -27,7 +29,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
   const importInputRef = useRef(null);
 
   // Profile state
-  const [currentUser, setCurrentUser] = useState(null);
+  const [localCurrentUser, setLocalCurrentUser] = useState(null);
   const [profileForm, setProfileForm] = useState({
     username: '',
     email: '',
@@ -41,20 +43,21 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
   const [profileSuccess, setProfileSuccess] = useState(false);
   const [profileError, setProfileError] = useState('');
 
+
   useEffect(() => {
     if (activeTab === 'data-model') {
       fetchModelOptions();
     } else if (activeTab === 'audit') {
       fetchAuditLogs();
     } else if (activeTab === 'profile') {
-      fetchCurrentUser();
+      fetchLocalCurrentUser();
     }
   }, [activeTab]);
 
-  const fetchCurrentUser = async () => {
+  const fetchLocalCurrentUser = async () => {
     try {
       const user = await authAPI.getCurrentUser();
-      setCurrentUser(user);
+      setLocalCurrentUser(user);
       setProfileForm({
         username: user.username || '',
         email: user.email || '',
@@ -116,7 +119,7 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
       });
 
       // Refresh user data
-      await fetchCurrentUser();
+      await fetchLocalCurrentUser();
 
       setTimeout(() => setProfileSuccess(false), 3000);
     } catch (error) {
@@ -348,7 +351,10 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
     { id: 'profile', label: 'My Profile' },
     { id: 'data-model', label: 'Data Model' },
     { id: 'import-export', label: 'Import/Export' },
-    { id: 'audit', label: 'Audit Log' },
+    ...(currentUser?.role === 'admin' ? [
+      { id: 'users', label: 'User Management' },
+      { id: 'audit-logs', label: 'Audit Logs' },
+    ] : []),
   ];
 
   return (
@@ -913,6 +919,14 @@ const SettingsPage = ({ appSettings, customFields, fetchCustomFields, handleAppN
                 )}
               </div>
             </div>
+          )}
+
+          {activeTab === 'users' && currentUser?.role === 'admin' && (
+            <UserManagement />
+          )}
+
+          {activeTab === 'audit-logs' && currentUser?.role === 'admin' && (
+            <AuditLogs />
           )}
         </div>
       </div>

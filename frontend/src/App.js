@@ -206,13 +206,8 @@ const App = () => {
     { id: 'settings', label: 'Settings', icon: Settings },
   ];
 
-  // Admin-only navigation items
-  const adminNavigationItems = currentUser?.role === 'admin' ? [
-    { id: 'users', label: 'User Management', icon: Users },
-    { id: 'audit-logs', label: 'Audit Logs', icon: FileText },
-  ] : [];
-
-  const allNavigationItems = [...navigationItems, ...adminNavigationItems];
+  // No separate admin navigation items - they're now in Settings
+  const allNavigationItems = navigationItems;
 
   // Show loading state while checking authentication
   if (authLoading) {
@@ -404,15 +399,8 @@ const App = () => {
             fetchCustomFields={fetchCustomFields}
             handleAppNameChange={handleAppNameChange}
             setAppSettings={setAppSettings}
+            currentUser={currentUser}
           />
-        )}
-
-        {activeSection === 'users' && currentUser?.role === 'admin' && (
-          <UserManagement />
-        )}
-
-        {activeSection === 'audit-logs' && currentUser?.role === 'admin' && (
-          <AuditLogs />
         )}
             </div>
           </div>
