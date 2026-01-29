@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { peopleAPI, casesAPI, businessesAPI } from '../../utils/api';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.REACT_APP_API_URL || '/api';
 
 const RelationshipManager = ({ 
   personId = null,
