@@ -154,3 +154,16 @@ input, select, textarea {
 .leaflet-marker-icon.custom-marker-icon {
   z-index: 600 !important;
 }
+
+/* =========================================
+   SIDEBAR SCROLLING FIX
+   ========================================= */
+.sidebar-scroll-fix {
+  height: 100vh; /* Forces the sidebar to be exactly the height of the screen */
+  max-height: 100vh;
+  overflow-y: auto; /* Enables vertical scrolling when content overflows */
+  flex-shrink: 0; /* Prevents a flexbox parent from shrinking the sidebar */
+  overscroll-behavior: contain; /* Prevents "scroll chaining" to the main body */
+  top: 0;
+  position: sticky;
+}
