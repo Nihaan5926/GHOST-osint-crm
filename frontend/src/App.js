@@ -233,10 +233,11 @@ const App = () => {
         <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-ocean opacity-15 dark:opacity-8 rounded-full blur-3xl"></div>
       </div>
       
-      {/* Sidebar */}
-      <div className="relative w-72 lg:w-72 md:w-64 sm:w-56 glass-card m-4 rounded-glass-lg backdrop-blur-xl border border-white/30 shadow-glass-lg flex-shrink-0">
-        {/* Header */}
-        <div className="p-6 border-b border-white/20">
+      {/* Sidebar - ADDED flex and flex-col HERE */}
+      <div className="relative flex flex-col w-72 lg:w-72 md:w-64 sm:w-56 glass-card m-4 rounded-glass-lg backdrop-blur-xl border border-white/30 shadow-glass-lg flex-shrink-0">
+        
+        {/* Header - ADDED flex-shrink-0 HERE */}
+        <div className="p-6 border-b border-white/20 flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               {appSettings.appLogo ? (
@@ -256,8 +257,8 @@ const App = () => {
           </div>
         </div>
         
-        {/* Navigation */}
-        <nav className="p-4 space-y-2">
+        {/* Navigation - ADDED flex-1 and overflow-y-auto HERE */}
+        <nav className="p-4 space-y-2 flex-1 overflow-y-auto">
           {allNavigationItems.map((item, index) => {
             const Icon = item.icon;
             const isActive = activeSection === item.id;
@@ -295,8 +296,8 @@ const App = () => {
           </button>
         </nav>
         
-        {/* Advanced Search Button */}
-        <div className="p-4 border-t border-white/20">
+        {/* Advanced Search Button - ADDED flex-shrink-0 HERE */}
+        <div className="p-4 border-t border-white/20 flex-shrink-0">
           <button
             onClick={() => setShowAdvancedSearch(true)}
             className="w-full p-4 glass-heavy text-gray-700 rounded-glass hover:shadow-glow-sm transition-all duration-300 flex items-center justify-center space-x-2 group"
